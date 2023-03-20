@@ -1,5 +1,3 @@
-!pip install tchan
-
 from flask import Flask
 from tchan import ChannelScraper
 
