@@ -4,6 +4,8 @@ import requests
 from flask import Flask
 from tchan import ChannelScraper
 
+TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
+TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
 app = Flask(__name__)
 
 def ultimas_promocoes():
@@ -65,5 +67,5 @@ def promocoes2():
 @app.route("/dedoduro")
 def dedoduro():
   mesagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou a página dedo duro!"}
-  requests.post(f"https://api.telegram.org.bot/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
-  return  "Mensagem enviada."
+  reposta = requests.post(f"https://api.telegram.org.bot/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
+  return  f"Mensagem enviada." Resposta ({reposta.status})
