@@ -18,7 +18,7 @@ def ultimas_promocoes():
       return resultado
 
 menu = """
-<a href="/">Página inicial</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/promocoes">Promoções</a>
+<a href="/">Página inicial</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/promocoes">Promoções</a> | <a href="/dedoduro">Dedoduro</a> 
 <br>
 """
 
