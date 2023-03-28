@@ -82,5 +82,5 @@ def dedoduro():
 
 @app.route("/dedoduro2")
 def dedoduro2():
-  sheet.append_row(["Fernando", "Barbosa", "tentando"])
-  return "Planilha escrita"  
+  sheet.append_row(["Fernando", "Barbosa", "agora"])
+  return "Planilha escrita"
