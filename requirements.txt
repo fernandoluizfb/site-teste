@@ -7,4 +7,3 @@ oauth2client
 pandas
 python-bcb
 numpy
-bcb
