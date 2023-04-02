@@ -38,13 +38,21 @@ ontem = hoje - timedelta(days=1)
 
 
 menu = """
-<a href="/">Página inicial</a> |  
+<a href="/">Página inicial</a> | <a href="/">Nova mensagem</a> |  
+<br>
 <br>
 """
 
 @app.route("/")
 def hello_world():
   return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
+
+###Recebendo aviso de nova mensagem
+@app.route("/novamensagem")
+def novamensagem:
+  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou o Robô de Dados do Banco Central"}
+  requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
+  return "Mensagem enviada."
 
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
