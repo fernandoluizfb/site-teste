@@ -8,3 +8,4 @@ pandas
 python-bcb
 numpy
 bcb
+datetime
