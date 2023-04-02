@@ -38,7 +38,7 @@ ontem = hoje - timedelta(days=1)
 
 
 menu = """
-<a href="/">Página inicial</a> | <a href="/">Nova mensagem</a> |  
+<a href="/">Página inicial</a> |  
 <br>
 <br>
 """
@@ -46,13 +46,6 @@ menu = """
 @app.route("/")
 def hello_world():
   return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
-
-###Recebendo aviso de nova mensagem
-@app.route("/novamensagem")
-def novamensagem:
-  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou o Robô de Dados do Banco Central"}
-  requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
-  return "Mensagem enviada."
 
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
@@ -62,6 +55,13 @@ def telegram_bot():
   nova_mensagem = {"chat_id": chat_id, "text": message}
   requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=nova_mensagem)
   return "ok"
+
+###Recebendo aviso de nova mensagem
+@app.route("/novamensagem")
+def novamensagem:
+  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Um novo usuário acessou o Robô de Dados do Banco Central"}
+  requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
+  return "Mensagem enviada."
 
 #Consultando diferentes moedas
 
