@@ -119,7 +119,7 @@ else libra_ptax
 ###Libra
   pd.set_option('float_format', '{:.4}'.format)
   libra_ptax = libra_ptax.sort_index(ascending=False)
-  return libra_ptax.head(10)
+  return libra_ptax.head(5)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Definindo os percentuais
@@ -131,11 +131,37 @@ if dolar_percentual:
   pd.set_option('float_format', '{:.0}'.format)
   dolar_percentual = dolar_ptax['dolar'].pct_change(periods=-1)
   dolar_percentual = dolar_percentual.reset_index()
-  return dolar_percentual
-  
-  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  return dolar_percentual.head(5)
 
-###Indicando a variação do dólar com o processamento dos dados
+#Dólar Canadense
+elif dolar_canadense_percentual:
+  pd.set_option('float_format', '{:.0}'.format)
+  dolar_canadense_percentual = dolar_canadense_ptax['dolar canadense'].pct_change(periods=-1)
+  dolar_canadense_percentual = dolar_canadense_percentual.reset_index()
+  return dolar_canadense_percentual.head(5)
+
+#Euro
+elif euro:
+  pd.set_option('float_format', '{:.0}'.format)
+  euro_percentual = euro_ptax['euro'].pct_change(periods=-1)
+  euro_percentual = euro_percentual.reset_index()
+  return euro_percentual.head(5)
+
+#Libra
+else libra:
+  pd.set_option('float_format', '{:.0}'.format)
+  libra_percentual = libra_ptax['libra'].pct_change(periods=-1) 
+  libra_percentual = libra_percentual.reset_index()
+  return libra_percentual
+  
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  
+#Memorizando as cotações das moedas na planilha
+
+###Dólar
+
 pd.set_option('float_format', '{:.2}'.format)
 
 dolar_hoje = dolar_ptax.reset_index().loc[0,'dolar']
@@ -146,27 +172,8 @@ dolar_ante_anteontem = dolar_ptax.reset_index().loc[3,'dolar']
 variacao_hoje = dolar_percentual.reset_index().loc[0, 'dolar']
 variacao_ontem = dolar_percentual.reset_index().loc[1,'dolar']
 
-if dolar_hoje > dolar_ontem:
-  print(f'O dólar fechou o dia em R${dolar_hoje:.4}, patamar {variacao_hoje:.1}% acima de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4}')
+###Dólar canadense
 
-else:
-  dolar_hoje < dolar_ontem 
-  print(f'O dólar fechou o dia em R${dolar_hoje:.4}, percentual {variacao_hoje:.1}% abaixo de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4} ')
-  
- ###Jogando os dados da variação do dólar na planilha
-sheetcotacao.update("A2", f'"R$ {dolar_hoje}')
-sheetcotacao.update("A3", f'"R$ {dolar_ontem}')
-sheetcotacao.update("A4", f'"R$ {dolar_anteontem}')
-sheetcotacao.update("A5", f'"R$ {dolar_ante_anteontem}')
-
-#Dólar Canadense
-
-pd.set_option('float_format', '{:.0}'.format)
-dolar_canadense_percentual = dolar_canadense_ptax['dolar canadense'].pct_change(periods=-1)
-dolar_canadense_percentual = dolar_canadense_percentual.reset_index()
-dolar_canadense_percentual
-
-###Indicando a variação do dólar com o processamento dos dados
 pd.set_option('float_format', '{:.2}'.format)
 
 dolar_canadense_hoje = dolar_canadense_ptax.reset_index().loc[0,'dolar canadense']
@@ -177,12 +184,105 @@ dolar_canadense_ante_anteontem = dolar_canadense_ptax.reset_index().loc[3,'dolar
 variacao_hoje_canadense = dolar_canadense_percentual.reset_index().loc[0, 'dolar canadense']
 variacao_ontem_canadense = dolar_canadense_percentual.reset_index().loc[1,'dolar canadense']
 
-if dolar_canadense_hoje > dolar_canadense_ontem:
+###Euro
+pd.set_option('float_format', '{:.2}'.format)
+
+euro_hoje = euro_ptax.reset_index().loc[0,'euro']
+euro_ontem = euro_ptax.reset_index().loc[1,'euro']
+euro_anteontem = euro_ptax.reset_index().loc[2,'euro']
+euro_ante_anteontem = euro_ptax.reset_index().loc[3,'euro']
+
+variacao_hoje_euro = euro_percentual.reset_index().loc[0, 'euro']
+variacao_ontem_euro = euro_percentual.reset_index().loc[1,'euro']
+
+###Libra
+pd.set_option('float_format', '{:.2}'.format)
+
+libra_hoje = libra_ptax.reset_index().loc[0,'libra']
+libra_ontem = libra_ptax.reset_index().loc[1,'libra']
+libra_anteontem = libra_ptax.reset_index().loc[2,'libra']
+libra_ante_anteontem = libra_ptax.reset_index().loc[3,'libra']
+
+variacao_hoje_libra = libra_percentual.reset_index().loc[0, 'libra']
+variacao_ontem_libra = libra_percentual.reset_index().loc[1,'libra']
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+###Indicando a variação das moedas no processamento de dados
+
+
+#Dólar
+
+def dolar_variacao():
+  
+  if dolar_hoje > dolar_ontem:
+  print(f'O dólar fechou o dia em R${dolar_hoje:.4}, patamar {variacao_hoje:.1}% acima de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4}')
+  
+  else:
+  dolar_hoje < dolar_ontem 
+  print(f'O dólar fechou o dia em R${dolar_hoje:.4}, percentual {variacao_hoje:.1}% abaixo de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4} ')
+  
+#Dólar canadense  
+
+def dolar_canadense_variacao():
+  
+  if dolar_canadense_hoje > dolar_canadense_ontem:
   print(f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, patamar {variacao_hoje_canadense:.1}% acima de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4}')
+ 
+  else:
+  dolar_canadense_hoje < dolar_canadense_ontem 
+  print(f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, patamar {variacao_hoje_canadense:.1}% abaixo de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4} ') 
+
+#Euro  
+
+def euro_variacao():
+  if euro_hoje > euro_ontem:
+  print(f'O euro fechou o dia em R${euro_hoje:.4}, patamar {variacao_hoje_euro:.1}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4}')
+  
+  else:
+  euro_hoje < euro_ontem 
+  print(f'O euro fechou o dia em R${euro_hoje:.4}, percentual {variacao_hoje_euro:.1}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4} ')
+
+#Libra
+
+def libra_variacao():
+  if libra_hoje > libra_ontem:
+  print(f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.1}% acima de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4}')
 
 else:
-  dolar_canadense_hoje < dolar_canadense_ontem 
-  print(f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, patamar {variacao_hoje_canadense:.1}% abaixo de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4} ')
+  libra_hoje < libra_ontem 
+  print(f'A libra fechou o dia em R${libra_hoje:.4}, percentual {variacao_hoje_libra:.1}% abaixo de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4} ')
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------  
+  
+  
+ ###Jogando os dados da variação do dólar na planilha
+sheetcotacao.update("A2", f'"R$ {dolar_hoje}')
+sheetcotacao.update("A3", f'"R$ {dolar_ontem}')
+sheetcotacao.update("A4", f'"R$ {dolar_anteontem}')
+sheetcotacao.update("A5", f'"R$ {dolar_ante_anteontem}')
+    
+    
+  
+pd.set_option('float_format', '{:.2}'.format)
+
+
+euro_hoje = euro_ptax.reset_index().loc[0,'euro']
+euro_ontem = euro_ptax.reset_index().loc[1,'euro']
+euro_anteontem = euro_ptax.reset_index().loc[2,'euro']
+euro_ante_anteontem = euro_ptax.reset_index().loc[3,'euro']
+
+  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
   
 ###Jogando os dados da variação da libra na planilha
 sheetcotacao.update("D2", f'"R$ {dolar_canadense_hoje}')
@@ -198,23 +298,9 @@ euro_percentual = euro_percentual.reset_index()
 euro_percentual
 
 
-###Indicando a variação do dólar com o processamento dos dados
-pd.set_option('float_format', '{:.2}'.format)
 
-euro_hoje = euro_ptax.reset_index().loc[0,'euro']
-euro_ontem = euro_ptax.reset_index().loc[1,'euro']
-euro_anteontem = euro_ptax.reset_index().loc[2,'euro']
-euro_ante_anteontem = euro_ptax.reset_index().loc[3,'euro']
 
-variacao_hoje_euro = euro_percentual.reset_index().loc[0, 'euro']
-variacao_ontem_euro = euro_percentual.reset_index().loc[1,'euro']
 
-if euro_hoje > euro_ontem:
-  print(f'O euro fechou o dia em R${euro_hoje:.4}, patamar {variacao_hoje_euro:.1}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4}')
-
-else:
-  euro_hoje < euro_ontem 
-  print(f'O euro fechou o dia em R${euro_hoje:.4}, percentual {variacao_hoje_euro:.1}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4} ')
   
 ###Jogando os dados da variação do euro na planilha
 sheetcotacao.update("B2", f'"R$ {euro_hoje}')
@@ -230,30 +316,12 @@ libra_ontem = libra_ptax.reset_index().loc[1,'libra']
 libra_anteontem = libra_ptax.reset_index().loc[2, 'libra']
 libra_ante_anteontem = libra_ptax.reset_index().loc[3,'libra']
 
-###Consultando o percentual da libra
-pd.set_option('float_format', '{:.0}'.format)
-libra_percentual = libra_ptax['libra'].pct_change(periods=-1)
-libra_percentual = libra_percentual.reset_index()
-libra_percentual
 
 
-###Indicando a variação da libra com o processamento dos dados
-pd.set_option('float_format', '{:.2}'.format)
 
-libra_hoje = libra_ptax.reset_index().loc[0,'libra']
-libra_ontem = libra_ptax.reset_index().loc[1,'libra']
-libra_anteontem = libra_ptax.reset_index().loc[2,'libra']
-libra_ante_anteontem = libra_ptax.reset_index().loc[3,'libra']
 
-variacao_hoje_libra = libra_percentual.reset_index().loc[0, 'libra']
-variacao_ontem_libra = libra_percentual.reset_index().loc[1,'libra']
 
-if libra_hoje > libra_ontem:
-  print(f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.1}% acima de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4}')
 
-else:
-  libra_hoje < libra_ontem 
-  print(f'A libra fechou o dia em R${libra_hoje:.4}, percentual {variacao_hoje_libra:.1}% abaixo de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4} ')
   
   ###Jogando os dados da variação da libra na planilha
 
