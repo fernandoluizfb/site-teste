@@ -14,6 +14,15 @@ from datetime import timedelta
 
 app = Flask(__name__)
 
+def bcb(codigo):
+
+  link = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json'
+  df = pd.read_json(link)
+  df.index = pd.to_datetime(df['data'])
+  df = df.sort_index(ascending=False)
+  df=df.drop('data',axis=1)
+  return df
+
 ###Importando as moedas
 selic = sgs.get({'selic':432}, start = '1994-01-01')
 ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
