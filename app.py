@@ -14,47 +14,17 @@ from datetime import timedelta
 
 app = Flask(__name__)
 
-def bcb(codigo):
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  link = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json'
-  df = pd.read_json(link)
-  df.index = pd.to_datetime(df['data'])
-  df = df.sort_index(ascending=False)
-  df=df.drop('data',axis=1)
-  return df
-
-###Importando as moedas
-selic = sgs.get({'selic':432}, start = '1994-01-01')
-ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
-dolar_ptax = sgs.get({'dolar':1}, start = '1994-01-01')
-euro_ptax = sgs.get({'euro':21619}, start = '1994-01-01')
-libra_ptax = sgs.get({'libra':21623}, start = '1994-01-01')
-dolar_canadense_ptax = sgs.get({'dolar canadense':21635}, start = '1994-01-01')
-iene_ptax = sgs.get({'iene':21621}, start = '1994-01-01')
-peso_argentino_ptax = sgs.get({'dolar':14001}, start = '1994-01-01')
-
-###Definindo a data de hoje
-
-hoje = date.today()
-###hoje = hoje.date()
-
-###Definindo amanhã
-amanha = hoje + timedelta(days=1)
-
-###Definindo ontem
-ontem = hoje - timedelta(days=1)
-
-
+@app.route("/")
+def hello_world():
+  return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
 
 menu = """
 <a href="/">Página inicial</a> |  
 <br>
 <br>
 """
-
-@app.route("/")
-def hello_world():
-  return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
 
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
@@ -72,28 +42,6 @@ def novamensagem:
   requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
   return "Mensagem enviada."
 
-#Consultando diferentes moedas
-
-###Dólar
-pd.set_option('float_format', '{:.4}'.format)
-dolar_ptax = dolar_ptax.sort_index(ascending=False)
-dolar_ptax.head(5)
-
-###Dólar Canadense
-pd.set_option('float_format', '{:.4}'.format)
-dolar_canadense_ptax = dolar_canadense_ptax.sort_index(ascending=False)
-dolar_canadense_ptax.head(5)
-
-###Euro
-pd.set_option('float_format', '{:.4}'.format)
-euro_ptax = euro_ptax.sort_index(ascending=False)
-euro_ptax.head(5)
-
-###Libra
-pd.set_option('float_format', '{:.4}'.format)
-libra_ptax = libra_ptax.sort_index(ascending=False)
-libra_ptax.head(10)
-
 #Configurando as informações de forma segura
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
@@ -106,11 +54,86 @@ api = gspread.authorize(conta) # sheets.new
 planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
 sheet = planilha.worksheet("Sheet1")
 
-#Dólar
-pd.set_option('float_format', '{:.0}'.format)
-dolar_percentual = dolar_ptax['dolar'].pct_change(periods=-1)
-dolar_percentual = dolar_percentual.reset_index()
-dolar_percentual
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+###Importando as moedas
+
+def bcb(codigo):
+
+  link = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json'
+  df = pd.read_json(link)
+  df.index = pd.to_datetime(df['data'])
+  df = df.sort_index(ascending=False)
+  df=df.drop('data',axis=1)
+  return df
+
+selic = sgs.get({'selic':432}, start = '1994-01-01')
+ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
+dolar_ptax = sgs.get({'dolar':1}, start = '1994-01-01')
+euro_ptax = sgs.get({'euro':21619}, start = '1994-01-01')
+libra_ptax = sgs.get({'libra':21623}, start = '1994-01-01')
+dolar_canadense_ptax = sgs.get({'dolar canadense':21635}, start = '1994-01-01')
+iene_ptax = sgs.get({'iene':21621}, start = '1994-01-01')
+peso_argentino_ptax = sgs.get({'dolar':14001}, start = '1994-01-01')
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+###Definindo a data de hoje
+
+def data()
+
+  return hoje = date.today()
+###hoje = hoje.date()
+
+###Definindo amanhã
+  return amanha = hoje + timedelta(days=1)
+
+###Definindo ontem
+  return ontem = hoje - timedelta(days=1)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Consultando diferentes moedas
+
+def moedas():
+
+if dolar_ptax:  
+###Dólar
+  pd.set_option('float_format', '{:.4}'.format)
+  dolar_ptax = dolar_ptax.sort_index(ascending=False)
+  return dolar_ptax.head(5)
+
+elif dolar_canadense_ptax:
+###Dólar Canadense
+  pd.set_option('float_format', '{:.4}'.format)
+  dolar_canadense_ptax = dolar_canadense_ptax.sort_index(ascending=False)
+  return dolar_canadense_ptax.head(5)
+
+elif euro_ptax:
+###Euro
+  pd.set_option('float_format', '{:.4}'.format)
+  euro_ptax = euro_ptax.sort_index(ascending=False)
+  return euro_ptax.head(5)
+
+else libra_ptax
+###Libra
+  pd.set_option('float_format', '{:.4}'.format)
+  libra_ptax = libra_ptax.sort_index(ascending=False)
+  return libra_ptax.head(10)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Definindo os percentuais
+
+def percentuais():
+
+#Dólar  
+if dolar_percentual:
+  pd.set_option('float_format', '{:.0}'.format)
+  dolar_percentual = dolar_ptax['dolar'].pct_change(periods=-1)
+  dolar_percentual = dolar_percentual.reset_index()
+  return dolar_percentual
+  
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ###Indicando a variação do dólar com o processamento dos dados
 pd.set_option('float_format', '{:.2}'.format)
