@@ -116,40 +116,7 @@ def libra_ptax():
     pd.set_option('float_format', '{:.4}'.format)
     return df.head(5)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#Definindo os percentuais
-
-def percentuais():
-
-#Dólar  
-if dolar_percentual():
-  pd.set_option('float_format', '{:.0}'.format)
-  dolar_percentual = dolar_ptax['dolar'].pct_change(periods=-1)
-  dolar_percentual = dolar_percentual.reset_index()
-  return dolar_percentual.head(5)
-
-#Dólar Canadense
-elif dolar_canadense_percentual():
-  pd.set_option('float_format', '{:.0}'.format)
-  dolar_canadense_percentual = dolar_canadense_ptax['dolar canadense'].pct_change(periods=-1)
-  dolar_canadense_percentual = dolar_canadense_percentual.reset_index()
-  return dolar_canadense_percentual.head(5)
-
-#Euro
-elif euro():
-  pd.set_option('float_format', '{:.0}'.format)
-  euro_percentual = euro_ptax['euro'].pct_change(periods=-1)
-  euro_percentual = euro_percentual.reset_index()
-  return euro_percentual.head(5)
-
-#Libra
-else libra():
-  pd.set_option('float_format', '{:.0}'.format)
-  libra_percentual = libra_ptax['libra'].pct_change(periods=-1) 
-  libra_percentual = libra_percentual.reset_index()
-  return libra_percentual
-  
-  
+ 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
   
   
@@ -254,136 +221,183 @@ def libra_variacao():
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------  
   
   
- ###Jogando os dados da variação do dólar na planilha
-sheetcotacao.update("A2", f'"R$ {dolar_hoje}')
-sheetcotacao.update("A3", f'"R$ {dolar_ontem}')
-sheetcotacao.update("A4", f'"R$ {dolar_anteontem}')
-sheetcotacao.update("A5", f'"R$ {dolar_ante_anteontem}')
+#PROCESSANDO O DÓLAR AMERICANO
+
+pd.set_option('float_format', '{:.2%}'.format)
+
+def dolar_percentual():
+
+  dolar_percentual = (dolar['dolar'] / dolar['dolar'].shift(1) - 1)
+  dolar_percentual = dolar_percentual.sort_index(ascending=False).reset_index()
+
+  return dolar_percentual
+
+###As cotações do dólar hoje, ontem, anteontem e do dia antes de anteontem
+
+pd.set_option('float_format', '{:.2%}'.format)
+
+dolar_ptax_hoje = dolar_ptax().sort_index(ascending=False).loc[0,'Dólar']
+dolar_ptax_ontem = dolar_ptax().sort_index(ascending=False).loc[1,'Dólar']
+dolar_ptax_anteontem = dolar_ptax().sort_index(ascending=False).loc[2,'Dólar']
+dolar_ptax_ante_anteontem = dolar_ptax().sort_index(ascending=False).loc[3,'Dólar']
+
+
+###Percentuais do dólar
+
+pd.set_option('float_format', '{:.1f}'.format)
+
+dolar_percentual = (dolar['dolar'] / dolar['dolar'].shift(1) - 1)
+dolar_percentual = dolar_percentual.sort_index(ascending=False).reset_index()
+dolar_percentual = dolar['dolar'].pct_change().sort_index(ascending=False)
+
+variacao_hoje = dolar_percentual.loc[dolar_percentual.index[0]]
+variacao_ontem = dolar_percentual.loc[dolar_percentual.index[1]]
+
+###Processando os dados do dólar americano
+
+def dolar_variacao():
   
-###Jogando os dados da variação da libra na planilha
-sheetcotacao.update("D2", f'"R$ {dolar_canadense_hoje}')
-sheetcotacao.update("D3", f'"R$ {dolar_canadense_ontem}')
-sheetcotacao.update("D4", f'"R$ {dolar_canadense_anteontem}')
-sheetcotacao.update("D5", f'"R$ {dolar_canadense_ante_anteontem}')
-
-###Jogando os dados da variação do euro na planilha
-sheetcotacao.update("B2", f'"R$ {euro_hoje}')
-sheetcotacao.update("B3", f'"R$ {euro_ontem}')
-sheetcotacao.update("B4", f'"R$ {euro_anteontem}')
-sheetcotacao.update("B5", f'"R$ {euro_ante_anteontem}')
+  if dolar_ptax_hoje > dolar_ptax_ontem:
+    return (f'O dólar fechou o dia em R${dolar_ptax_hoje:.4}, patamar {variacao_hoje:.0}% acima de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ptax_ontem:.4}')
   
-###Jogando os dados da variação da libra na planilha
-
-sheetcotacao.update("C2", f'"R$ {libra_hoje}')
-sheetcotacao.update("C3", f'"R$ {libra_ontem}')
-sheetcotacao.update("C4", f'"R$ {libra_anteontem}')
-sheetcotacao.update("C5", f'"R$ {libra_ante_anteontem}')
-  
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-###Guardando o token do robô com segurança
-import getpass
-token = getpass.getpass()
-
-###Fazendo a requisição para o robô
-resposta = requests.get(f"https://api.telegram.org/bot{token}/getMe")
-
-
-###Utilizando o dicionário do robô
-dados = resposta.json()
-dados_internos = dados['result']
-nome_do_bot = dados_internos['username']
-id_do_bot = dados_internos['id']
-
-print(f'Robô Dados do Banco Central @{nome_do_bot} ({id_do_bot})')
-
-resposta = requests.get(f"https://api.telegram.org/bot{token}/getUpdates")
-dados = resposta.json()['result']
-print(dados)
-
-#Deixar o dicionário visualmente mais legível
-import json
-print(json.dumps(dados, indent=2))
-
-import pandas as pd 
-valor = 1675722349 # número de segundos desde 00/01/1970 00:00:00
-
-import datetime
-convertido = datetime.datetime.fromtimestamp(valor)
-update_id = 0
-updates_processados = []
-
-# Pegar na planilha do sheets o último update_id
-resposta = sheet.get("B2")
-celula = resposta[0][0] ###Pegando os valores dentro dos dicionários
-update = int(celula) ###Transformando a string em número
-
-###Parâmetros de uma URL (query strings)
-
-resposta = requests.get(f"https://api.telegram.org/bot{token}/getUpdates?offset={update_id + 1}" )
-dados = resposta.json()['result']
-print(f"Temos {len(dados)} novas atualizações:")
-mensagens = []
-
-for update in dados:
-  update_id = update["update_id"]
-###Extraindo as respostas dos usuários
-  first_name = update["message"]["from"]["first_name"]
-  last_name = update["message"]["from"]["last_name"]
-  sender_id = update["message"]["from"]["id"]
-  if "text" not in update["message"]: ###Ignorando mensagens que não sejam textos
-    continue
-  message = update["message"]["text"]
-  id_do_bot = update["message"]["chat"]["id"]
-  datahora = str(datetime.datetime.fromtimestamp(update["message"]["date"]))
-  if "nome_do_bot" in update ["message"]["from"]:
-    nome_do_bot = f' @{update["message"]["from"]["first_name"]["last_name"]}'
   else:
-    nome_do_bot = ""
-  print(f"[{datahora}]Nova mensagem de {first_name} {last_name}{nome_do_bot} ({id_do_bot}): {message}" )
-  mensagens.append([str(datahora), "recebida", first_name, id_do_bot, message]) ###Para colocar na tabela as mensagens enviadas
+      return (f'O dólar fechou o dia em R${dolar_ptax_hoje:.4}, percentual {variacao_hoje:.0}% abaixo de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ptax_ontem:.4} ')
 
-###Definindo resposta para os usuários
+dolar_variacao()    
 
-  if message == "/start":
-    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro e 3 para a libra"
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
-  elif message == "1":
-    texto_resposta = (f'O dólar fechou o dia em R${dolar_hoje}')
+#PROCESSANDO O DÓLAR CANADENSE
 
-  elif message == "2":
-    texto_resposta = (f'O euro fechou o dia em R${euro_hoje}')
+pd.set_option('float_format', '{:.2%}'.format)
 
-  elif message == "3":
-    texto_resposta = (f'A libra fechou o dia em R${libra_hoje}')
+def dolar_canadense_percentual():
+    dolar_canadense_percentual = (dolar_canadense['dolar_canadense'] / dolar_canadense['dolar_canadense'].shift(1) - 1)
+    dolar_canadense_percentual = dolar_canadense_percentual.sort_index(ascending=False).reset_index()
+    
+    return dolar_canadense_percentual
 
-  elif message == "4":
-    texto_resposta = (f'O dólar canadense fechou o dia em R${libra_hoje}')
+###salvando em variáveis as cotações do dólar canadense dos últimos dias
 
+pd.set_option('float_format', '{:.1f}'.format)
+
+dolar_canadense_ptax_hoje = dolar_canadense_ptax().sort_index(ascending=False).loc[0,'dólar canadense']
+dolar_canadense_ptax_ontem = dolar_canadense_ptax().sort_index(ascending=False).loc[1,'dólar canadense']
+dolar_canadense_ptax_anteontem = dolar_canadense_ptax().sort_index(ascending=False).loc[2,'dólar canadense']
+dolar_canadense_ptax_ante_anteontem = dolar_canadense_ptax().sort_index(ascending=False).loc[3,'dólar canadense']
+
+dolar_canadense_percentual = dolar_canadense['dolar_canadense'].pct_change().sort_index(ascending=False)
+variacao_canadense_hoje = dolar_canadense_percentual.loc[dolar_canadense_percentual.index[0]]
+variacao_canadense_ontem = dolar_canadense_percentual.loc[dolar_canadense_percentual.index[1]]
+
+###Processando os dados do dólar canadense
+
+def dolar_canadense_variacao():
+  
+  if dolar_canadense_ptax_hoje > dolar_canadense_ptax_ontem:
+    return (f'O dólar canadense fechou o dia em R${dolar_canadense_ptax_hoje:.4}, patamar {variacao_canadense_hoje:.0}% acima de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ptax_ontem:.4}')
+  
   else:
-    texto_resposta = "Não entendi. Pode repetir, por favor?"
-  nova_mensagem = {"chat_id": id_do_bot, "text": texto_resposta}
-  requests.post(f"https://api.telegram.org/bot{token}/sendMessage", data=nova_mensagem)
-  mensagens.append([str(datahora), "enviada", first_name, id_do_bot, texto_resposta]) ###Para colocar na tabela as mensagens enviadas
+      return (f'O dólar canadense fechou o dia em R${dolar_canadense_ptax_hoje:.4}, percentual {variacao_canadense_hoje:.0}% abaixo de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ptax_ontem:.4} ')
 
-###Atualiza a planilha do sheets com o último update
-sheet.append_rows(mensagens)
-sheet.update("B2", update_id)
+dolar_canadense_variacao()  
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+#PROCESSANDO OS DADOS DO EURO
+
+pd.set_option('float_format', '{:.2%}'.format)
+
+def euro_percentual():
+    euro_percentual = (euro['euro'] / euro['euro'].shift(1) - 1)
+    euro_percentual = euro_percentual.sort_index(ascending=False).reset_index()
+    
+    return euro_percentual
+
+###Salvando em variáveis as cotações do dólar canadense dos últimos dias
+
+pd.set_option('float_format', '{:.1f}'.format)
+
+euro_ptax_hoje = euro_ptax().sort_index(ascending=False).loc[0,'Euro']
+euro_ptax_ontem = euro_ptax().sort_index(ascending=False).loc[1,'Euro']
+euro_ptax_anteontem = euro_ptax().sort_index(ascending=False).loc[2,'Euro']
+euro_ptax_ante_anteontem = euro_ptax().sort_index(ascending=False).loc[3,'Euro']
+
+euro_percentual = euro['euro'].pct_change().sort_index(ascending=False)
+variacao_euro_hoje = euro_percentual.loc[euro_percentual.index[0]]
+variacao_euro_ontem = euro_percentual.loc[euro_percentual.index[1]]
+
+###Processando os dados do euro
+
+def euro_variacao():
+  
+  if euro_ptax_hoje > euro_ptax_ontem:
+    return (f'O euro fechou o dia em R${euro_ptax_hoje:.4}, patamar {variacao_euro_hoje:.0}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ptax_ontem:.4}')
+  
+  else:
+      return (f'O euro fechou o dia em R${euro_ptax_hoje:.4}, percentual {variacao_euro_ontem:.0}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ptax_ontem:.4} ')
+
+euro_variacao()  
 
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+#Consultando os percentuais da libra
+
+pd.set_option('float_format', '{:.2%}'.format)
+
+def libra_percentual():
+    libra_percentual = (libra['libra'] / libra['libra'].shift(1) - 1)
+    libra_percentual = libra_percentual.sort_index(ascending=False).reset_index()
+    
+    return libra_percentual
+  
+  
+###Salvando em variáveis as cotações da libra dos últimos dias
+
+pd.set_option('float_format', '{:.1f}'.format)
+
+libra_ptax_hoje = libra_ptax().sort_index(ascending=False).loc[0,'libra']
+libra_ptax_ontem = libra_ptax().sort_index(ascending=False).loc[1,'libra']
+libra_ptax_anteontem = libra_ptax().sort_index(ascending=False).loc[2,'libra']
+libra_ptax_ante_anteontem = libra_ptax().sort_index(ascending=False).loc[3,'libra']
+
+libra_percentual = libra['libra'].pct_change().sort_index(ascending=False)
+variacao_libra_hoje = libra_percentual.loc[libra_percentual.index[0]]
+variacao_libra_ontem = libra_percentual.loc[libra_percentual.index[1]]
+
+###Processando os dados da libra
+
+def libra_variacao():
+  
+  if libra_ptax_hoje > libra_ptax_ontem:
+    return (f'A libra fechou o dia em R${libra_ptax_hoje:.4}, patamar {variacao_libra_hoje:.0}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${libra_ptax_ontem:.4}')
+  
+  else:
+      return (f'A libra fechou o dia em R${libra_ptax_hoje:.4}, patamar {variacao_euro_hoje:.0}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${libra_ptax_ontem:.4} ')
+
+libra_variacao()  
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+###Salvando as cotações na planilha
+
+sheetcotacao.update("A2", f'"R$ {dolar_ptax_hoje}')
+sheetcotacao.update("A3", f'"R$ {dolar_ptax_ontem}')
+sheetcotacao.update("A4", f'"R$ {dolar_ptax_anteontem}')
+sheetcotacao.update("A5", f'"R$ {dolar_ptax_ante_anteontem}'
+
+sheetcotacao.update("D2", f'"R$ {dolar_canadense_ptax_hoje}')
+sheetcotacao.update("D3", f'"R$ {dolar_canadense_ptax_ontem}')
+sheetcotacao.update("D4", f'"R$ {dolar_canadense_ptax_anteontem}')
+sheetcotacao.update("D5", f'"R$ {dolar_canadense_ptax_ante_anteontem}')
+
+sheetcotacao.update("B2", f'"R$ {euro_ptax_hoje}')
+sheetcotacao.update("B3", f'"R$ {euro_ptax_ontem}')
+sheetcotacao.update("B4", f'"R$ {euro_ptax_anteontem}')
+sheetcotacao.update("B5", f'"R$ {euro_ptax_ante_anteontem}')
+
+sheetcotacao.update("C2", f'"R$ {libra_ptax_hoje}')
+sheetcotacao.update("C3", f'"R$ {libra_ptax_ontem}')
+sheetcotacao.update("C4", f'"R$ {libra_ptax_anteontem}')
+sheetcotacao.update("C5", f'"R$ {libra_ptax_ante_anteontem}')
