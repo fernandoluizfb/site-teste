@@ -58,15 +58,6 @@ sheet = planilha.worksheet("Sheet1")
 
 ###Importando as moedas
 
-def bcb(codigo):
-
-  link = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo}/dados?formato=json'
-  df = pd.read_json(link)
-  df.index = pd.to_datetime(df['data'])
-  df = df.sort_index(ascending=False)
-  df=df.drop('data',axis=1)
-  return df
-
 selic = sgs.get({'selic':432}, start = '1994-01-01')
 ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
 dolar_ptax = sgs.get({'dolar':1}, start = '1994-01-01')
@@ -76,55 +67,54 @@ dolar_canadense_ptax = sgs.get({'dolar canadense':21635}, start = '1994-01-01')
 iene_ptax = sgs.get({'iene':21621}, start = '1994-01-01')
 peso_argentino_ptax = sgs.get({'dolar':14001}, start = '1994-01-01')
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ###Definindo a data de hoje
 
-def data():
+from datetime import date, timedelta
 
-  if hoje: 
-    return (date.today())
+def hoje():
+    return date.today()
 
-###Definindo amanhã
-  elif amanha:
-    return (hoje + timedelta(days=1))
+def amanha():
+    return date.today() + timedelta(days=1)
 
-  else: 
-    ontem
-    return (hoje - timedelta(days=1))
+def ontem():
+    return date.today() - timedelta(days=1)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Consultando diferentes moedas
+###Consultando diferentes moedas
 
-#Consultando diferentes moedas
-
-def moedas():
-
-###Dólar
-  if dolar_ptax:  
+def dolar_ptax():
+    df = sgs.get(1)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "Dólar", df.columns[1]: "Dólar"})
     pd.set_option('float_format', '{:.4}'.format)
-    dolar_ptax = dolar_ptax.sort_index(ascending=False)
-    return [dolar_ptax.head(5)]
+    return df.head(5)
 
-###Dólar Canadense
-  elif dolar_canadense_ptax:
+def euro_ptax():
+    df = sgs.get(21619)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "Euro", df.columns[1]: "Euro"})
     pd.set_option('float_format', '{:.4}'.format)
-    dolar_canadense_ptax = dolar_canadense_ptax.sort_index(ascending=False)
-    return [dolar_canadense_ptax.head(5)]
+    return df.head(5)
 
-###Euro
-  elif euro_ptax:
+def dolar_canadense_ptax():
+    df = sgs.get(21635)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "dólar_canadense", df.columns[1]: "dólar canadense"})
     pd.set_option('float_format', '{:.4}'.format)
-    euro_ptax = euro_ptax.sort_index(ascending=False)
-    return [euro_ptax.head(5)]
+    return df.head(5)
 
-###Libra
-  else: 
-    libra_ptax
+def libra_ptax():
+    df = sgs.get(21623)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "libra", df.columns[1]: "libra"})
     pd.set_option('float_format', '{:.4}'.format)
-    libra_ptax = libra_ptax.sort_index(ascending=False)
-    return [libra_ptax.head(5)]
+    return df.head(5)
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #Definindo os percentuais
