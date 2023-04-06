@@ -355,33 +355,8 @@ app = Flask(__name__)
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]                    
+
                     
-def start(update, context):
-    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
-    context.bot.send_message(chat_id=update.effective_chat.id, text=texto_resposta)
-
-def echo(update, context):
-    message = update.message.text
-    id_do_bot = update.effective_chat.id
-    
-    if message == "1":
-        texto_resposta = dolar_variacao()
-    elif message == "2":
-        texto_resposta = euro_variacao()
-    elif message == "3":
-        texto_resposta = libra_variacao()
-    elif message == "4":
-        texto_resposta = dolar_canadense_variacao()
-    else:
-        texto_resposta = "Não entendi. Pode repetir, por favor?"
-        
-    context.bot.send_message(chat_id=id_do_bot, text=texto_resposta)
-
-def webhook(request):
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-    dispatcher.process_update(update)
-    return 'ok'
-
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
     update = request.json
@@ -404,4 +379,27 @@ if __name__ == "__main__":
                           port=int(PORT),
                           url_path=TELEGRAM_API_KEY)
     updater.bot.setWebhook(APP_URL + TELEGRAM_API_KEY)
-    updater.idle()
+    updater.idle()                    
+                    
+def start(update, context):
+    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
+    context.bot.send_message(chat_id=update.effective_chat.id, text=texto_resposta)
+
+def echo(update, context):
+    message = update.message.text
+    id_do_bot = update.effective_chat.id
+    
+    if message == "1":
+        texto_resposta = dolar_variacao()
+    elif message == "2":
+        texto_resposta = euro_variacao()
+    elif message == "3":
+        texto_resposta = libra_variacao()
+    elif message == "4":
+        texto_resposta = dolar_canadense_variacao()
+    else:
+        texto_resposta = "Não entendi. Pode repetir, por favor?"
+        
+    context.bot.send_message(chat_id=id_do_bot, text=texto_resposta)
+
+
