@@ -405,6 +405,3 @@ if __name__ == "__main__":
                           url_path=TELEGRAM_API_KEY)
     updater.bot.setWebhook(APP_URL + TELEGRAM_API_KEY)
     updater.idle()
-
-
-
