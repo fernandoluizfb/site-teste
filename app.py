@@ -15,8 +15,6 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 app = Flask(__name__)
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 @app.route("/")
 def hello_world():
   return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
