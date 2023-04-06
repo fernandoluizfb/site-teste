@@ -350,7 +350,19 @@ def webhook():
 # Função para responder às mensagens do Telegram
 def telegram_bot(message, chat_id):
     if message == "/start":
-        bot.send_message(chat_id=chat_id, text="Olá, bem-vindo!")
+    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
+
+  elif message == "1":
+    texto_resposta = def dolar_variacao()
+
+  elif message == "2":
+    texto_resposta = def euro_variacao()
+
+  elif message == "3":
+    texto_resposta = def libra_variacao():
+  
+  elif message == "4"
+    texto_resposta = def dolar_canadense_variacao()
     else:
         bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
 
