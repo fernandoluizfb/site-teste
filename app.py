@@ -368,18 +368,15 @@ def start(update, context):
 def echo(update, context):
     message = update.message.text
     id_do_bot = update.effective_chat.id
-    
-    if message == "/start":
-      texto_resposta =     texto_resposta = 
-    
+        
     if message == "1":
-        texto_resposta = (f'O dólar fechou o dia em R${dolar_hoje}')
+        texto_resposta = return dolar_variacao()
     elif message == "2":
-        texto_resposta = (f'O euro fechou o dia em R${euro_hoje}')
+        texto_resposta = return euro_variacao()
     elif message == "3":
-        texto_resposta = (f'A libra fechou o dia em R${libra_hoje}')
+        texto_resposta = return libra_variacao()
     elif message == "4":
-        texto_resposta = (f'o dólar canadense fechou o dia em R${libra_hoje}')
+        texto_resposta = return dolar_canadense_variacao()
     else:
         texto_resposta = "Não entendi. Pode repetir, por favor?"
     context.bot.send_message(chat_id=id_do_bot, text=texto_resposta)
