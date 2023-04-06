@@ -321,27 +321,7 @@ libra_variacao()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
-###Salvando as cotações na planilha
 
-sheetcotacao.update("A2", f'"R$ {dolar_ptax_hoje}')
-sheetcotacao.update("A3", f'"R$ {dolar_ptax_ontem}')
-sheetcotacao.update("A4", f'"R$ {dolar_ptax_anteontem}')
-sheetcotacao.update("A5", f'"R$ {dolar_ptax_ante_anteontem}'
-
-sheetcotacao.update("D2", f'"R$ {dolar_canadense_ptax_hoje}')
-sheetcotacao.update("D3", f'"R$ {dolar_canadense_ptax_ontem}')
-sheetcotacao.update("D4", f'"R$ {dolar_canadense_ptax_anteontem}')
-sheetcotacao.update("D5", f'"R$ {dolar_canadense_ptax_ante_anteontem}')
-
-sheetcotacao.update("B2", f'"R$ {euro_ptax_hoje}')
-sheetcotacao.update("B3", f'"R$ {euro_ptax_ontem}')
-sheetcotacao.update("B4", f'"R$ {euro_ptax_anteontem}')
-sheetcotacao.update("B5", f'"R$ {euro_ptax_ante_anteontem}')
-
-sheetcotacao.update("C2", f'"R$ {libra_ptax_hoje}')
-sheetcotacao.update("C3", f'"R$ {libra_ptax_ontem}')
-sheetcotacao.update("C4", f'"R$ {libra_ptax_anteontem}')
-sheetcotacao.update("C5", f'"R$ {libra_ptax_ante_anteontem}')
                     
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
