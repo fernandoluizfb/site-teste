@@ -10,3 +10,4 @@ numpy
 bcb
 datetime
 python-telegram-bot
+telegram
