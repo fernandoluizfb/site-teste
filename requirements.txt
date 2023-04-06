@@ -7,7 +7,7 @@ oauth2client
 pandas
 python-bcb
 numpy
-bcb
+bcb==0.3.0
 datetime
 python-telegram-bot
 telegram
