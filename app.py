@@ -3,7 +3,6 @@ import os
 import gspread
 import pandas as pd
 import requests
-import bcb
 
 from flask import Flask, request
 from oauth2client.service_account import ServiceAccountCredentials
