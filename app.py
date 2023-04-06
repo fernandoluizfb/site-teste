@@ -10,6 +10,7 @@ from tchan import ChannelScraper
 from bcb import sgs
 from datetime import datetime, date
 from datetime import timedelta
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
 app = Flask(__name__)
@@ -34,6 +35,7 @@ def telegram_bot():
   nova_mensagem = {"chat_id": chat_id, "text": message}
   requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=nova_mensagem)
   return "ok"
+
 
 ###Recebendo aviso de nova mensagem
 @app.route("/novamensagem")
@@ -167,56 +169,6 @@ libra_ante_anteontem = libra_ptax.reset_index().loc[3,'libra']
 
 variacao_hoje_libra = libra_percentual.reset_index().loc[0, 'libra']
 variacao_ontem_libra = libra_percentual.reset_index().loc[1,'libra']
-
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-###Indicando a variação das moedas no processamento de dados
-
-
-#Dólar
-
-def dolar_variacao():
-  
-  if dolar_hoje > dolar_ontem:
-    return (f'O dólar fechou o dia em R${dolar_hoje:.4}, patamar {variacao_hoje:.1}% acima de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4}')
-  
-  else:
-    dolar_hoje < dolar_ontem 
-    return (f'O dólar fechou o dia em R${dolar_hoje:.4}, percentual {variacao_hoje:.1}% abaixo de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4} ')
-  
-#Dólar canadense  
-
-def dolar_canadense_variacao():
-  
-  if dolar_canadense_hoje > dolar_canadense_ontem:
-    return(f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, patamar {variacao_hoje_canadense:.1}% acima de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4}')
- 
-  else:
-    dolar_canadense_hoje < dolar_canadense_ontem 
-    return(f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, patamar {variacao_hoje_canadense:.1}% abaixo de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4} ') 
-
-#Euro  
-
-def euro_variacao():
- 
-  if euro_hoje > euro_ontem:
-    return(f'O euro fechou o dia em R${euro_hoje:.4}, patamar {variacao_hoje_euro:.1}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4}')
-  
-  else:
-    euro_hoje < euro_ontem 
-    return(f'O euro fechou o dia em R${euro_hoje:.4}, percentual {variacao_hoje_euro:.1}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${euro_ontem:.4} ')
-
-#Libra
-
-def libra_variacao():
-  
-  if libra_hoje > libra_ontem:
-    return(f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.1}% acima de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4}')
-
-  else:
-    libra_hoje < libra_ontem 
-    return(f'A libra fechou o dia em R${libra_hoje:.4}, percentual {variacao_hoje_libra:.1}% abaixo de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4} ')
   
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------  
   
@@ -401,3 +353,40 @@ sheetcotacao.update("C2", f'"R$ {libra_ptax_hoje}')
 sheetcotacao.update("C3", f'"R$ {libra_ptax_ontem}')
 sheetcotacao.update("C4", f'"R$ {libra_ptax_anteontem}')
 sheetcotacao.update("C5", f'"R$ {libra_ptax_ante_anteontem}')
+                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    
+###Configuração do bot
+
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+def start(update, context):
+    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
+    context.bot.send_message(chat_id=update.effective_chat.id, text=texto_resposta)
+
+def echo(update, context):
+    message = update.message.text
+    id_do_bot = update.effective_chat.id
+    
+    if message == "/start":
+      texto_resposta =     texto_resposta = 
+    
+    if message == "1":
+        texto_resposta = (f'O dólar fechou o dia em R${dolar_hoje}')
+    elif message == "2":
+        texto_resposta = (f'O euro fechou o dia em R${euro_hoje}')
+    elif message == "3":
+        texto_resposta = (f'A libra fechou o dia em R${libra_hoje}')
+    elif message == "4":
+        texto_resposta = (f'o dólar canadense fechou o dia em R${libra_hoje}')
+    else:
+        texto_resposta = "Não entendi. Pode repetir, por favor?"
+    context.bot.send_message(chat_id=id_do_bot, text=texto_resposta)
+
+def webhook(request):
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    dispatcher.process_update(update)
+    return 'ok'
+
+
