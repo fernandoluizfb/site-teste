@@ -47,7 +47,6 @@ conta = conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.js
 api = gspread.authorize(conta) # sheets.new
 planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
 sheet = planilha.worksheet("Sheet1")
-
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ###Importando as moedas
