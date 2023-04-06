@@ -336,7 +336,7 @@ bot = telegram.Bot(token=bot_token)
 
 # Defina a URL pública do seu aplicativo Render
 # Certifique-se de que essa URL corresponde ao seu endereço Render
-app_url = {https://site-teste-fernando.onrender.com}
+app_url = 'https://site-teste-fernando.onrender.com'
 
 # Rota para o webhook do Telegram
 @app.route(f"/{TELEGRAM_API_KEY}", methods=["POST"])
