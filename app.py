@@ -38,15 +38,7 @@ def novamensagem():
 
 #Configurando as informações de forma segura
 
-TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
-TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
-GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
-with open("credenciais.json", mode="w") as arquivo:
-  arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
-conta = conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
-api = gspread.authorize(conta) # sheets.new
-planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
-sheet = planilha.worksheet("Sheet1")
+
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ###Importando as moedas
@@ -354,6 +346,16 @@ def telegram_bot():
     chat_id = update.message.chat.id
     message = update.message.text
     bot = telegram.Bot(token=TELEGRAM_API_KEY)
+    
+    TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
+    TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
+    GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
+    with open("credenciais.json", mode="w") as arquivo:
+    arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
+    conta = conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
+    api = gspread.authorize(conta) # sheets.new
+    planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
+    sheet = planilha.worksheet("Sheet1")
 
     if message == '/start':
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nDigite a moeda desejada."
@@ -373,6 +375,8 @@ def telegram_bot():
     else:
         texto_resposta = "Não entendi. Pode repetir, por favor?"
         bot.send_message(chat_id=chat_id, text=texto_resposta)
+        
+        
 
     return 'ok'
 
