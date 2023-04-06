@@ -360,7 +360,12 @@ sheetcotacao.update("C5", f'"R$ {libra_ptax_ante_anteontem}')
 ###Configuração do bot
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+                    
+app = Flask(__name__)
 
+TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
+TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]                    
+                    
 def start(update, context):
     texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
     context.bot.send_message(chat_id=update.effective_chat.id, text=texto_resposta)
@@ -368,22 +373,48 @@ def start(update, context):
 def echo(update, context):
     message = update.message.text
     id_do_bot = update.effective_chat.id
-        
+    
     if message == "1":
-        texto_resposta = return dolar_variacao()
+        texto_resposta = dolar_variacao()
     elif message == "2":
-        texto_resposta = return euro_variacao()
+        texto_resposta = euro_variacao()
     elif message == "3":
-        texto_resposta = return libra_variacao()
+        texto_resposta = libra_variacao()
     elif message == "4":
-        texto_resposta = return dolar_canadense_variacao()
+        texto_resposta = dolar_canadense_variacao()
     else:
         texto_resposta = "Não entendi. Pode repetir, por favor?"
+        
     context.bot.send_message(chat_id=id_do_bot, text=texto_resposta)
 
 def webhook(request):
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     dispatcher.process_update(update)
     return 'ok'
+
+@app.route("/telegram-bot", methods=["POST"])
+def telegram_bot():
+    update = request.json
+    chat_id = update["message"]["chat"]["id"]
+    message = update["message"]["text"]
+    nova_mensagem = {"chat_id": chat_id, "text": message}
+    requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=nova_mensagem)
+
+if __name__ == "__main__":
+    updater = telegram.ext.Updater(token=TELEGRAM_API_KEY, use_context=True)
+    dispatcher = updater.dispatcher
+
+    start_handler = telegram.ext.CommandHandler('start', start)
+    echo_handler = telegram.ext.MessageHandler(Filters.text & (~Filters.command), echo)
+
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(echo_handler)
+
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TELEGRAM_API_KEY)
+    updater.bot.setWebhook(APP_URL + TELEGRAM_API_KEY)
+    updater.idle()
+
 
 
