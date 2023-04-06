@@ -19,6 +19,8 @@ app = Flask(__name__)
 def hello_world():
   return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
 
+
+
 menu = """
 <a href="/">Página inicial</a> |  
 <br>
@@ -328,10 +330,21 @@ libra_variacao()
                     
 ###Configuração do bot
                     
-from flask import Flask, request
+from flask import Flask, request, render_template
 import telegram
 
 app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+@app.route("/about/")
+def about():
+    return render_template("about.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 
