@@ -27,10 +27,11 @@ menu = """
 
 ###Recebendo aviso de nova mensagem
 @app.route("/novamensagem")
-def novamensagem:
-  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Um novo usuário acessou o Robô de Dados do Banco Central"}
-  requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
-  return "Mensagem enviada."
+def novamensagem():
+    mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Um novo usuário acessou o Robô de Dados do Banco Central"}
+    requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
+    return "Mensagem enviada."
+
 
 #Configurando as informações de forma segura
 
