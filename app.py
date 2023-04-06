@@ -331,7 +331,7 @@ import telegram
 app = Flask(__name__)
 
 # Defina a chave de acesso do seu bot aqui
-bot_token = {TELEGRAM_API_KEY}
+bot_token = os.environ.get('TELEGRAM_API_KEY')
 bot = telegram.Bot(token=bot_token)
 
 # Defina a URL pública do seu aplicativo Render
@@ -339,7 +339,7 @@ bot = telegram.Bot(token=bot_token)
 app_url = 'https://site-teste-fernando.onrender.com'
 
 # Rota para o webhook do Telegram
-@app.route(f"/{TELEGRAM_API_KEY}", methods=["POST"])
+@app.route(f"/{bot_token}", methods=["POST"])
 def webhook():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat_id
@@ -350,26 +350,45 @@ def webhook():
 # Função para responder às mensagens do Telegram
 def telegram_bot(message, chat_id):
     if message == "/start":
-    texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
+        texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
 
-  elif message == "1":
-    texto_resposta = def dolar_variacao()
+    elif message == "1":
+        texto_resposta = dolar_variacao()
 
-  elif message == "2":
-    texto_resposta = def euro_variacao()
+    elif message == "2":
+        texto_resposta = euro_variacao()
 
-  elif message == "3":
-    texto_resposta = def libra_variacao():
+    elif message == "3":
+        texto_resposta = libra_variacao()
   
-  elif message == "4"
-    texto_resposta = def dolar_canadense_variacao()
+    elif message == "4":
+        texto_resposta = dolar_canadense_variacao()
+        
     else:
         bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
 
+# Funções para retornar informações econômicas
+def dolar_variacao():
+    # código para obter a variação do dólar
+    return "Variação do dólar"
+
+def euro_variacao():
+    # código para obter a variação do euro
+    return "Variação do euro"
+
+def libra_variacao():
+    # código para obter a variação da libra
+    return "Variação da libra"
+
+def dolar_canadense_variacao():
+    # código para obter a variação do dólar canadense
+    return "Variação do dólar canadense"
+
 if __name__ == "__main__":
     # Defina o webhook para escutar as atualizações de mensagem do Telegram
-    bot.setWebhook(url=f"{app_url}{TELEGRAM_API_KEY}")
+    bot.setWebhook(url=f"{app_url}{bot_token}")
     app.run()
+
 
 
 
