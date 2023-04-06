@@ -1,5 +1,5 @@
 flask
-gunicorn
+gunicorn==20.1.0
 tchan
 requests
 gspread
