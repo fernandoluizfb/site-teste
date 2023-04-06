@@ -13,6 +13,5 @@ telegram
 python-dotenv==0.17.0
 matplotlib==3.4.2
 pytz==2021.1
-bcb
-bcb==0.2.0
+bcb==<versão>
 bcb --index-url https://pypi.python.org/simple/
