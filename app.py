@@ -330,53 +330,35 @@ import telegram
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("home.html")
+# Defina a chave de acesso do seu bot aqui
+bot_token = {TELEGRAM_API_KEY}
+bot = telegram.Bot(token=bot_token)
 
-@app.route("/about/")
-def about():
-    return render_template("about.html")
+# Defina a URL pública do seu aplicativo Render
+# Certifique-se de que essa URL corresponde ao seu endereço Render
+app_url = {https://site-teste-fernando.onrender.com}
 
-TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
-TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
-GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
-
-with open("credenciais.json", mode="w") as arquivo:
-    arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
-
-conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
-api = gspread.authorize(conta) # sheets.new
-planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
-sheet = planilha.worksheet("Sheet1")
-
-@app.route('/telegram-bot', methods=['POST'])
-def telegram_bot():
-    update = telegram.Update.de_json(request.get_json(force=True), telegram.Bot(token=TELEGRAM_API_KEY))
-    chat_id = update.message.chat.id
+# Rota para o webhook do Telegram
+@app.route(f"/{TELEGRAM_API_KEY}", methods=["POST"])
+def webhook():
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
+    chat_id = update.message.chat_id
     message = update.message.text
-    bot = telegram.Bot(token=TELEGRAM_API_KEY)
+    telegram_bot(message, chat_id)
+    return "ok"
 
-    if message == '/start':
-        texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nDigite a moeda desejada."
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
-    elif message.lower() == 'dólar':
-        texto_resposta = dolar_variacao()
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
-    elif message.lower() == 'euro':
-        texto_resposta = euro_variacao()
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
-    elif message.lower() == 'libra':
-        texto_resposta = libra_variacao()
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
-    elif message.lower() == 'dólar canadense':
-        texto_resposta = dolar_canadense_variacao()
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
+# Função para responder às mensagens do Telegram
+def telegram_bot(message, chat_id):
+    if message == "/start":
+        bot.send_message(chat_id=chat_id, text="Olá, bem-vindo!")
     else:
-        texto_resposta = "Não entendi. Pode repetir, por favor?"
-        bot.send_message(chat_id=chat_id, text=texto_resposta)
+        bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
 
-    return 'ok'
+if __name__ == "__main__":
+    # Defina o webhook para escutar as atualizações de mensagem do Telegram
+    bot.setWebhook(url=f"{app_url}{TELEGRAM_API_KEY}")
+    app.run()
+
 
 
 
