@@ -322,6 +322,9 @@ libra_variacao()
                     
 ###Configuração do bot
                     
+import os
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 from flask import Flask, request, render_template
 import telegram
 
@@ -335,10 +338,17 @@ def home():
 def about():
     return render_template("about.html")
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
+TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
+GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
+
+with open("credenciais.json", mode="w") as arquivo:
+    arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
+
+conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
+api = gspread.authorize(conta) # sheets.new
+planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
+sheet = planilha.worksheet("Sheet1")
 
 @app.route('/telegram-bot', methods=['POST'])
 def telegram_bot():
@@ -346,16 +356,6 @@ def telegram_bot():
     chat_id = update.message.chat.id
     message = update.message.text
     bot = telegram.Bot(token=TELEGRAM_API_KEY)
-    
-    TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
-    TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
-    GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
-    with open("credenciais.json", mode="w") as arquivo:
-    arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
-    conta = conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
-    api = gspread.authorize(conta) # sheets.new
-    planilha = api.open_by_key("GOOGLE_SHEETS_CREDENTIALS")
-    sheet = planilha.worksheet("Sheet1")
 
     if message == '/start':
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro, a libra ou o dólar canadense?\nDigite a moeda desejada."
@@ -375,10 +375,9 @@ def telegram_bot():
     else:
         texto_resposta = "Não entendi. Pode repetir, por favor?"
         bot.send_message(chat_id=chat_id, text=texto_resposta)
-        
-        
 
     return 'ok'
+
 
 
 
