@@ -1,4 +1,5 @@
 Flask==2.0.1
+flask_cors
 gunicorn==20.1.0
 tchan
 requests
