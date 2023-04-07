@@ -213,6 +213,8 @@ euro_percentual_reset = euro_percentual_df.reset_index()
 variacao_hoje_euro = euro_percentual_reset.loc[0, 'euro']
 variacao_ontem_euro = euro_percentual_reset.loc[1,'euro']
 
+#Libra
+
 def libra_percentual():
     pd.set_option('float_format', '{:.0}'.format)
     libra_percentual = libra_ptax_reset['libra'].pct_change(periods=-1)
@@ -242,8 +244,6 @@ dolar_processo()
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
 #PROCESSANDO O DÓLAR CANADENSE
-
-###Processando os dados do dólar canadense
 
 def dolar_canadense_processo():
   
@@ -285,10 +285,10 @@ def libra_processo():
 
 libra_processo()  
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-                         
+                    
 ###Configuração do bot
 app = Flask(Dados_do_Banco_Central)
 
@@ -313,7 +313,7 @@ def webhook():
 def telegram_bot(message, chat_id):
     if message == "/start":
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
-
+        
     elif message == "1":
         texto_resposta = dolar_processo()
     elif message == "2":
@@ -329,8 +329,3 @@ if __name__ == "__main__":
     # Defina o webhook para escutar as atualizações de mensagem do Telegram
     bot.setWebhook(url=f"{app_url}{bot_token}")
     app.run()
-
-
-
-
-
