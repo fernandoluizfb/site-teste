@@ -108,9 +108,6 @@ def dolar_canadense_ptax():
     pd.set_option('float_format', '{:.4}'.format)
     return dolar_canadense_df.head(5)
 
-dolar_canadense_ptax_df = dolar_canadense_ptax()
-dolar_canadense_ptax_reset = dolar_canadense_ptax_df.reset_index()
-
 
 def libra_ptax():
     libra_df = sgs.get(21623)
@@ -150,10 +147,10 @@ dolar_canadense_ante_anteontem = dolar_canadense_ptax_reset.loc[3,'dolar canaden
 ###Euro
 pd.set_option('float_format', '{:.2}'.format)
 
-euro_hoje = euro_ptax_reset.loc[0,'euro']
-euro_ontem = euro_ptax_reset.loc[1,'euro']
-euro_anteontem = euro_ptax_reset.loc[2,'euro']
-euro_ante_anteontem = euro_ptax_reset.loc[3,'euro']
+euro_hoje = euro_ptax_reset.loc[0,'Euro']
+euro_ontem = euro_ptax_reset.loc[1,'Euro']
+euro_anteontem = euro_ptax_reset.loc[2,'Euro']
+euro_ante_anteontem = euro_ptax_reset.loc[3,'Euro']
 
 
 ###Libra
@@ -173,31 +170,30 @@ libra_ante_anteontem = libra_ptax_reset.loc[3,'libra']
 
 def dolar_percentual():
     pd.set_option('float_format', '{:.0}'.format)
-    dolar_percentual = dolar_ptax_reset['dolar'].pct_change(periods=-1)
+    dolar_percentual = dolar_ptax_reset['Dólar'].pct_change(periods=-1)
     dolar_percentual = dolar_percentual.reset_index()
     return dolar_percentual
 
 dolar_percentual_df = dolar_percentual()
 dolar_percentual_reset = dolar_percentual_df.reset_index()
 
-dolar_percentual_hoje = dolar_percentual_reset.loc[0, 'dolar']
-dolar_percentual_ontem = dolar_percentual_reset.loc[1,'dolar']
+dolar_percentual_hoje = dolar_percentual_reset.loc[0, 'Dólar']
+dolar_percentual_ontem = dolar_percentual_reset.loc[1,'Dólar']
 
 #Dólar Canadense
 
 
 def dolar_canadense_percentual():
     pd.set_option('float_format', '{:.0}'.format)
-    dolar_canadense_percentual = dolar_canadense_ptax_reset['dolar canadense'].pct_change(periods=-1)
+    dolar_canadense_percentual = dolar_canadense_ptax_reset['dólar canadense'].pct_change(periods=-1)
     dolar_canadense_percentual = dolar_canadense_percentual.reset_index()
     return dolar_canadense_percentual
 
-
 dolar_canadense_percentual_df = dolar_canadense_percentual()
-dolar_percentual_reset = dolar_percentual_df.reset_index()
+dolar_canadense_percentual_reset = dolar_canadense_percentual_df.reset_index()
 
-variacao_hoje_canadense = dolar_percentual_reset.loc[0, 'dolar canadense']
-variacao_ontem_canadense = dolar_percentual_reset.loc[1,'dolar canadense']
+variacao_hoje_canadense = dolar_canadense_percentual_reset.loc[0, 'dólar canadense']
+variacao_ontem_canadense = dolar_canadense_percentual_reset.loc[1,'dólar canadense'] 
 
 #Euro 
 
