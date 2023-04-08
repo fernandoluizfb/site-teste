@@ -11,8 +11,6 @@ from tchan import ChannelScraper
 from bcb import sgs
 from datetime import datetime, date
 from datetime import date, timedelta
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
@@ -45,25 +43,6 @@ def novamensagem():
   return "Mensagem enviada."
 
 
-#Configurando as informações de forma segura
-
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-###Importando as moedas
-
-###Os códigos de cada moeda ou índice
-
-selic = sgs.get({'selic':432}, start = '1994-01-01')
-ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
-dolar = sgs.get({'dolar':1}, start = '1994-01-01')
-euro = sgs.get({'euro':21619}, start = '1994-01-01')
-libra = sgs.get({'libra':21623}, start = '1994-01-01')
-dolar_canadense = sgs.get({'dolar_canadense':21635}, start = '1994-01-01')
-iene = sgs.get({'iene':21621}, start = '1994-01-01')
-peso_argentino = sgs.get({'dolar':14001}, start = '1994-01-01')
-
-
 ###Definindo a data de hoje
 
 def hoje():
@@ -76,95 +55,108 @@ def ontem():
     return date.today() - timedelta(days=1)
 
 
+###Os códigos de cada moeda ou índice
+
+selic = sgs.get({'selic':432}, start = '1994-01-01')
+ipca_mensal = sgs.get({'ipca':433}, start = '1994-01-01')
+dolar = sgs.get({'dolar':1}, start = '1994-01-01')
+euro = sgs.get({'euro':21619}, start = '1994-01-01')
+libra = sgs.get({'libra':21623}, start = '1994-01-01')
+dolar_canadense = sgs.get({'dolar_canadense':21635}, start = '1994-01-01')
+iene = sgs.get({'iene':21621}, start = '1994-01-01')
+peso_argentino = sgs.get({'dolar':14001}, start = '1994-01-01')
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ###Consultando diferentes moedas
 
 def dolar_ptax():
-    dolar_df = sgs.get(1)
-    dolar_df.index = pd.to_datetime(df.index, infer_datetime_format=True)
-    dolar_df = dolar_df.sort_index(ascending=False).reset_index()
-    dolar_df = dolar_df.rename(columns={"date": "Dólar", df.columns[1]: "Dólar"})
+    df = sgs.get(1)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "Dólar", df.columns[1]: "Dólar"})
     pd.set_option('float_format', '{:.4}'.format)
-    return dolar_df.head(5)
+    return df.head(10)
 
 dolar_ptax_df = dolar_ptax()
 dolar_ptax_reset = dolar_ptax_df.reset_index()
 
 def euro_ptax():
-    euro_df = sgs.get(21619)
-    euro_df.index = pd.to_datetime(df.index, infer_datetime_format=True)
-    euro_df = euro_df.sort_index(ascending=False).reset_index()
-    euro_df = euro_df.rename(columns={"date": "Euro", df.columns[1]: "Euro"})
+    df = sgs.get(21619)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "Euro", df.columns[1]: "Euro"})
     pd.set_option('float_format', '{:.4}'.format)
-    return euro_df.head(5)
+    return df.head(10)
 
 euro_ptax_df = euro_ptax()
 euro_ptax_reset = euro_ptax_df.reset_index()
 
 def dolar_canadense_ptax():
-    dolar_canadense_df = sgs.get(21635)
-    dolar_canadense_df.index = pd.to_datetime(df.index, infer_datetime_format=True)
-    dolar_canadense_df = dolar_canadense_df.sort_index(ascending=False).reset_index()
-    dolar_canadense_df = dolar_canadense_df.rename(columns={"date": "dólar_canadense", df.columns[1]: "dólar canadense"})
+    df = sgs.get(21635)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "dólar_canadense", df.columns[1]: "dólar canadense"})
     pd.set_option('float_format', '{:.4}'.format)
-    return dolar_canadense_df.head(5)
+    return df.head(10)
+
+dolar_canadense_ptax_df = dolar_canadense_ptax()
+dolar_canadense_ptax_reset = dolar_canadense_ptax_df.reset_index()
 
 
 def libra_ptax():
-    libra_df = sgs.get(21623)
-    libra_df.index = pd.to_datetime(df.index, infer_datetime_format=True)
-    libra_df = libra_df.sort_index(ascending=False).reset_index()
-    libra_df = libra_df.rename(columns={"date": "libra", df.columns[1]: "libra"})
+    df = sgs.get(21623)
+    df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+    df = df.sort_index(ascending=False).reset_index()
+    df = df.rename(columns={"date": "Libra", df.columns[1]: "Libra"})
     pd.set_option('float_format', '{:.4}'.format)
-    return libra_df.head(5)
+    return df.head(10)
 
 libra_ptax_df = libra_ptax()
 libra_ptax_reset = libra_ptax_df.reset_index()
- 
- 
+
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  
-  
-#Memorizando as cotações das moedas na planilha
+
+#MEMORIZANDO AS COTAÇÕES DAS MOEDAS NA PLANILHA
 
 ###Dólar
 
-pd.set_option('float_format', '{:.2}'.format)
+pd.set_option('float_format', '{:.3}'.format)
 
-dolar_hoje = dolar_ptax_reset.loc[0,'dolar']
-dolar_ontem = dolar_ptax_reset.loc[1,'dolar']
-dolar_anteontem = dolar_ptax_reset.loc[2,'dolar']
-dolar_ante_anteontem = dolar_ptax_reset.loc[3,'dolar']
+dolar_hoje = dolar_ptax_reset.loc[0,'Dólar']
+dolar_ontem = dolar_ptax_reset.loc[1,'Dólar']
+dolar_anteontem = dolar_ptax_reset.loc[2,'Dólar']
+dolar_ante_anteontem = dolar_ptax_reset.loc[3,'Dólar']
 
 ###Dólar canadense
 
 pd.set_option('float_format', '{:.2}'.format)
 
-dolar_canadense_hoje = dolar_canadense_ptax_reset.loc[0,'dolar canadense']
-dolar_canadense_ontem = dolar_canadense_ptax_reset.loc[1,'dolar canadense']
-dolar_canadense_anteontem = dolar_canadense_ptax_reset.loc[2,'dolar canadense']
-dolar_canadense_ante_anteontem = dolar_canadense_ptax_reset.loc[3,'dolar canadense']
+dolar_canadense_hoje = dolar_canadense_ptax_reset.loc[0,'dólar canadense']
+dolar_canadense_ontem = dolar_canadense_ptax_reset.loc[1,'dólar canadense']
+dolar_canadense_anteontem = dolar_canadense_ptax_reset.loc[2,'dólar canadense']
+dolar_canadense_ante_anteontem = dolar_canadense_ptax_reset.loc[3,'dólar canadense']
 
 ###Euro
-pd.set_option('float_format', '{:.2}'.format)
+pd.set_option('float_format', '{:.3}'.format)
 
 euro_hoje = euro_ptax_reset.loc[0,'Euro']
 euro_ontem = euro_ptax_reset.loc[1,'Euro']
 euro_anteontem = euro_ptax_reset.loc[2,'Euro']
 euro_ante_anteontem = euro_ptax_reset.loc[3,'Euro']
 
-
 ###Libra
 pd.set_option('float_format', '{:.2}'.format)
 
-libra_hoje = libra_ptax_reset.loc[0,'libra']
-libra_ontem = libra_ptax_reset.loc[1,'libra']
-libra_anteontem = libra_ptax_reset.loc[2,'libra']
-libra_ante_anteontem = libra_ptax_reset.loc[3,'libra']
+libra_hoje = libra_ptax_reset.loc[0,'Libra']
+libra_ontem = libra_ptax_reset.loc[1,'Libra']
+libra_anteontem = libra_ptax_reset.loc[2,'Libra']
+libra_ante_anteontem = libra_ptax_reset.loc[3,'Libra']
 
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------  
-  
-#ESTABELECENDO OS PERCENTUAIS
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Estabelecendo os percentuais
 
 ###Dólar 
 
@@ -182,7 +174,6 @@ dolar_percentual_ontem = dolar_percentual_reset.loc[1,'Dólar']
 
 #Dólar Canadense
 
-
 def dolar_canadense_percentual():
     pd.set_option('float_format', '{:.0}'.format)
     dolar_canadense_percentual = dolar_canadense_ptax_reset['dólar canadense'].pct_change(periods=-1)
@@ -193,39 +184,41 @@ dolar_canadense_percentual_df = dolar_canadense_percentual()
 dolar_canadense_percentual_reset = dolar_canadense_percentual_df.reset_index()
 
 variacao_hoje_canadense = dolar_canadense_percentual_reset.loc[0, 'dólar canadense']
-variacao_ontem_canadense = dolar_canadense_percentual_reset.loc[1,'dólar canadense'] 
+variacao_ontem_canadense = dolar_canadense_percentual_reset.loc[1,'dólar canadense']
 
 #Euro 
 
 def euro_percentual():
     pd.set_option('float_format', '{:.0}'.format)
-    euro_percentual = euro_ptax_reset['euro'].pct_change(periods=-1)
+    euro_percentual = euro_ptax_reset['Euro'].pct_change(periods=-1)
     euro_percentual = euro_percentual.reset_index()
     return euro_percentual
 
 euro_percentual_df = euro_percentual()
 euro_percentual_reset = euro_percentual_df.reset_index()
 
-variacao_hoje_euro = euro_percentual_reset.loc[0, 'euro']
-variacao_ontem_euro = euro_percentual_reset.loc[1,'euro']
+variacao_hoje_euro = euro_percentual_reset.loc[0, 'Euro']
+variacao_ontem_euro = euro_percentual_reset.loc[1,'Euro']
 
 #Libra
 
 def libra_percentual():
     pd.set_option('float_format', '{:.0}'.format)
-    libra_percentual = libra_ptax_reset['libra'].pct_change(periods=-1)
+    libra_percentual = libra_ptax_reset['Libra'].pct_change(periods=-1)
     libra_percentual = libra_percentual.reset_index()
     return libra_percentual
 
 libra_percentual_df = libra_percentual()
 libra_percentual_reset = libra_percentual_df.reset_index()
     
-variacao_hoje_libra = libra_percentual_reset.loc[0, 'libra']
-variacao_ontem_libra = libra_percentual_reset.loc[1,'libra']
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  
-#PROCESSANDO O DÓLAR AMERICANO
+variacao_hoje_libra = libra_percentual_reset.loc[0, 'Libra']
+variacao_ontem_libra = libra_percentual_reset.loc[1,'Libra']
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Processamento dos dados
+# 
+###Dólar
 
 def dolar_processo():
   
@@ -235,11 +228,10 @@ def dolar_processo():
   else:
       return (f'O dólar fechou o dia em R${dolar_hoje:.4}, percentual {dolar_percentual_hoje:.0}% abaixo de ontem. No dia anterior, a moeda americana havia encerrado em R${dolar_ontem:.4} ')
 
-dolar_processo()    
+dolar_processo()
 
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
-
-#PROCESSANDO O DÓLAR CANADENSE
+  
+###Dólar Canadense
 
 def dolar_canadense_processo():
   
@@ -250,9 +242,8 @@ def dolar_canadense_processo():
       return (f'O dólar canadense fechou o dia em R${dolar_canadense_hoje:.4}, percentual {variacao_hoje_canadense:.0}% abaixo de ontem. No dia anterior, a moeda canadense havia encerrado em R${dolar_canadense_ontem:.4} ')
 
 dolar_canadense_processo()
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
 
-#PROCESSANDO OS DADOS DO EURO
+###Euro
 
 def euro_processo():
   
@@ -264,12 +255,7 @@ def euro_processo():
 
 euro_processo()  
 
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
-
-#Consultando os percentuais da libra
-
-###Processando os dados da libra
+###Libra
 
 def libra_processo():
   
@@ -281,12 +267,12 @@ def libra_processo():
 
 libra_processo()  
 
+
+
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
                     
 ###Configuração do bot
-app = Flask(Dados_do_Banco_Central)
+app = Flask()
 
 # Defina a chave de acesso do seu bot aqui
 bot_token = os.environ.get('TELEGRAM_API_KEY')
@@ -325,3 +311,6 @@ if __name__ == "__main__":
     # Defina o webhook para escutar as atualizações de mensagem do Telegram
     bot.setWebhook(url=f"{app_url}{bot_token}")
     app.run()
+
+
+
