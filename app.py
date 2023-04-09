@@ -276,7 +276,8 @@ libra_processo()
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     
 ###Configuração do bot
-app = Flask()
+
+app = Flask(__name__)
 
 # Defina a chave de acesso do seu bot aqui
 bot_token = os.environ.get('TELEGRAM_API_KEY')
@@ -289,13 +290,13 @@ app_url = 'https://site-teste-fernando.onrender.com'
 # Rota para o webhook do Telegram
 @app.route(f"/{bot_token}", methods=["POST"])
 def telegram_bot():
-  update = telegram.Update.de_json(request.get_json(force=True), bot)
+    update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat_id
     message = update.message.text
-    nova_mensagem {
-      "chat_id": chat_id,
-       "text": f"Você enviou a mensagem: <b>{message}</b>",
-    "parse_mode": "HTML",
+    nova_mensagem = {
+        "chat_id": chat_id,
+        "text": f"Você enviou a mensagem: <b>{message}</b>",
+        "parse_mode": "HTML",
     }
     if message == "/start":
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
@@ -310,11 +311,13 @@ def telegram_bot():
         texto_resposta = dolar_canadense_processo()       
     else:
         bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
+        return nova_mensagem
 
 if __name__ == "__main__":
     # Defina o webhook para escutar as atualizações de mensagem do Telegram
-    bot.setWebhook(url=f"{app_url}{bot_token}")
+    bot.setWebhook(url=f"{app_url}/{bot_token}")
     app.run()
+
 
 #s
 
