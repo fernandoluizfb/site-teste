@@ -288,15 +288,15 @@ app_url = 'https://site-teste-fernando.onrender.com'
 
 # Rota para o webhook do Telegram
 @app.route(f"/{bot_token}", methods=["POST"])
-def webhook():
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
+def telegram_bot():
+  update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat_id
     message = update.message.text
-    telegram_bot(message, chat_id)
-    return "ok"
-
-# Função para responder às mensagens do Telegram
-def telegram_bot(message, chat_id):
+    nova_mensagem {
+      "chat_id": chat_id,
+       "text": f"Você enviou a mensagem: <b>{message}</b>",
+    "parse_mode": "HTML",
+    }
     if message == "/start":
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
         
