@@ -20,7 +20,7 @@ with open("credenciais.json", mode="w") as arquivo:
   arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
 conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
 api = gspread.authorize(conta)
-planilha = api.open_by_key("1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc/edit#gid=549163929")
+planilha = api.open_by_key("1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc")
 sheet = planilha.worksheet("cotacao")
 app = Flask(__name__)
 
@@ -317,8 +317,5 @@ if __name__ == "__main__":
     # Defina o webhook para escutar as atualizações de mensagem do Telegram
     bot.setWebhook(url=f"{app_url}/{bot_token}")
     app.run()
-
-
-#s
 
 
