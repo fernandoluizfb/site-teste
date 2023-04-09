@@ -68,7 +68,7 @@ euro = sgs.get({'euro':21619}, start = '1994-01-01')
 libra = sgs.get({'libra':21623}, start = '1994-01-01')
 dolar_canadense = sgs.get({'dolar_canadense':21635}, start = '1994-01-01')
 iene = sgs.get({'iene':21621}, start = '1994-01-01')
-peso_argentino = sgs.get({'dolar':14001}, start = '1994-01-01')
+peso_argentino = sgs.get({'peso_argentino':14001}, start = '1994-01-01')
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
