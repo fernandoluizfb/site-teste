@@ -291,19 +291,14 @@ libra_processo()
 
 
 # Rota para o webhook do Telegram
+# Rota para o webhook do Telegram
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
     update = request.get_json()
     chat_id = update["message"]["chat"]["id"]
     message = update["message"]["text"]
-    nova_mensagem = {
-        "chat_id": chat_id,
-        "text": f"Você enviou a mensagem: <b>{message}</b>",
-        "parse_mode": "HTML",
-    }
     if message == "/start":
         texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
-        
     elif message == "1":
         texto_resposta = dolar_processo()
     elif message == "2":
@@ -313,25 +308,23 @@ def telegram_bot():
     elif message == "4":
         texto_resposta = dolar_canadense_processo()       
     else:
-        bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
-
-        return nova_mensagem
+        texto_resposta = "Desculpe, não entendi."
     
     # envie a mensagem de resposta para o Telegram
-    url = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
     data = {
         "chat_id": chat_id,
         "text": texto_resposta,
         "parse_mode": "HTML"
     }
+    url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage"
     response = requests.post(url, data=data)
     print(response.json())
-    
 
     return "ok"
 
 if __name__ == "__main__":
     app.run()
+
 
 
 
