@@ -298,7 +298,7 @@ libra_processo()
 app = Flask(__name__)
 
 # Configurações da planilha
-SPREADSHEET_ID = ["GOOGLE_SHEETS_CREDENTIALS"]
+SPREADSHEET_ID = ["1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc"]
 RANGE_NAME = 'A2:D5'
 
 # Configurações da credencial do Google
