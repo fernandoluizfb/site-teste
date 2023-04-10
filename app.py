@@ -12,6 +12,9 @@ from bcb import sgs
 from datetime import datetime, date
 from datetime import date, timedelta
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Configurando informações sensíveis de forma segura
 
 TELEGRAM_API_KEY = os.environ["TELEGRAM_API_KEY"]
 TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
@@ -59,6 +62,8 @@ def dedoduro2():
   resposta = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
   return f"Mensagem enviada. Resposta ({resposta.status_code}): {resposta.text}"
 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ###Definindo a data de hoje
 
 def hoje():
@@ -69,6 +74,8 @@ def amanha():
 
 def ontem():
     return date.today() - timedelta(days=1)
+  
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 ###Os códigos de cada moeda ou índice
