@@ -12,7 +12,6 @@ from tchan import ChannelScraper
 from bcb import sgs
 from datetime import datetime, date
 from datetime import date, timedelta
-from googleapiclient.discovery import build
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -297,49 +296,6 @@ libra_processo()
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
          
 
-# Configurações da planilha
-SPREADSHEET_ID = "1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc"
-RANGE_NAME = "A2:D5"
-
-# Configurações da credencial do Google
-GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
-with open("credenciais.json", mode="w") as arquivo:
-  arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
-conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-
-# Cria o serviço do Google Sheets
-creds = service_account.Credentials.from_service_account_file('credentiais.json', scopes=SCOPES)
-service = build("sheets", "v4", credentials=creds)
-
-app = Flask(__name__)
-
-@app.route('/atualizar-planilha', methods=['POST'])
-def atualizar_planilha():
-    # Obtém os dados da solicitação
-    dados = request.json
-
-    # Atualiza os valores na planilha
-    atualizar_range = f"{RANGE_NAME}!A2:D5"
-    atualizar_values = [
-        [f"R$ {dados['dolar_hoje']}", f"R$ {dados['euro_hoje']}", f"R$ {dados['libra_hoje']}", f"R$ {dados['dolar_canadense_hoje']}'"],
-        [f"R$ {dados['dolar_ontem']}", f"R$ {dados['euro_ontem']}", f"R$ {dados['libra_ontem']}", f"R$ {dados['dolar_canadense_ontem']}'"],
-        [f"R$ {dados['dolar_anteontem']}", f"R$ {dados['euro_anteontem']}", f"R$ {dados['libra_anteontem']}", f"R$ {dados['dolar_canadense_anteontem']}'"],
-        [f"R$ {dados['dolar_ante_anteontem']}", f"R$ {dados['euro_ante_anteontem']}", f"R$ {dados['libra_ante_anteontem']}", f"R$ {dados['dolar_canadense_ante_anteontem']}'"]
-    ]
-    request_body = {
-        'values': atualizar_values
-    }
-    response = service.spreadsheets().values().update(
-        spreadsheetId=SPREADSHEET_ID, range=atualizar_range, valueInputOption='USER_ENTERED', body=request_body).execute()
-
-    return 'Planilha atualizada com sucesso!'
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-  
  ###Configurando o bot no Telegram em webhook
 
 # Rota para o webhook
