@@ -9,6 +9,16 @@ O objetivo desse site é buscar dados das cotações do dólar, euro, libra e d�
 *   Site em Flask
 *   Uso da API do Banco Central
 
+# Configuração inicial
+
+Não se esqueça de:
+
+*   Criar uma service account no Google Cloud
+*   Criar o token do seu robô no Telegram
+*   Criar uma página no Flask
+*   Configurar o setWebhook do Telegram
+*   Fazer uma conta no Render
+
 # Etapa 1
 
 A primeira etapa é estabelecer uma configuração para que as informações sensíveis, como tokens e ID do bot, fiquem alocadas de forma segura.
