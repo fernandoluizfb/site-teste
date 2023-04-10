@@ -293,9 +293,9 @@ libra_processo()
 # Rota para o webhook do Telegram
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
-    update = telegram.Update.de_json(request.get_json(force=True), bot)
-    chat_id = update.message.chat_id
-    message = update.message.text
+    update = request.get_json()
+    chat_id = update["message"]["chat"]["id"]
+    message = update["message"]["text"]
     nova_mensagem = {
         "chat_id": chat_id,
         "text": f"Você enviou a mensagem: <b>{message}</b>",
@@ -317,7 +317,7 @@ def telegram_bot():
         return nova_mensagem
     
     # envie a mensagem de resposta para o Telegram
-    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage"
     data = {
         "chat_id": chat_id,
         "text": texto_resposta,
