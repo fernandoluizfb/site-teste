@@ -7,6 +7,7 @@ import telegram
 
 from flask import Flask, request
 from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
 from tchan import ChannelScraper
 from bcb import sgs
 from datetime import datetime, date
