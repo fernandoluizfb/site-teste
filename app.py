@@ -309,7 +309,7 @@ conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # Cria o serviço do Google Sheets
-creds = service_account.Credentials.from_service_account_file(GOOGLE_SHEETS_CREDENTIALS, scopes=SCOPES)
+creds = service_account.Credentials.from_service_account_file('credentiais.json', scopes=SCOPES)
 service = build("sheets", "v4", credentials=creds)
 
 app = Flask(__name__)
@@ -341,7 +341,6 @@ if __name__ == '__main__':
 
   
  ###Configurando o bot no Telegram em webhook
-
 
 # Rota para o webhook
 @app.route("/telegram-bot", methods=["POST"])
