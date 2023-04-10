@@ -29,11 +29,6 @@ app = Flask(__name__)
 def hello_world():
   return menu + "Olá! Eu sou um robô que compila e automatiza dados do Banco Central"
 
-menu = """
-<a href="/">Página inicial</a> | <a href="/promocoes">PROMOÇÕES</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> 
-<br>
-"""
-
 ###Recebendo aviso de nova mensagem
 @app.route("/novamensagem")
 def novamensagem():
