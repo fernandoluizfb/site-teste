@@ -314,10 +314,11 @@ def telegram_bot():
         texto_resposta = dolar_canadense_processo()       
     else:
         bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
+
         return nova_mensagem
     
     # envie a mensagem de resposta para o Telegram
-    url = f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage"
+    url = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
     data = {
         "chat_id": chat_id,
         "text": texto_resposta,
