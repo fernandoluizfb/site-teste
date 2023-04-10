@@ -295,10 +295,6 @@ libra_processo()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     
-from flask import Flask, request
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-
 app = Flask(__name__)
 
 # Configurações da planilha
