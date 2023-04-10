@@ -295,20 +295,21 @@ libra_processo()
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    
-app = Flask(__name__)
+         
 
 # Configurações da planilha
 SPREADSHEET_ID = "1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc"
 RANGE_NAME = "A2:D5"
 
 # Configurações da credencial do Google
-GOOGLE_SHEETS_CREDENTIALS = "credenciais.json"
+GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # Cria o serviço do Google Sheets
 creds = service_account.Credentials.from_service_account_file(GOOGLE_SHEETS_CREDENTIALS, scopes=SCOPES)
 service = build("sheets", "v4", credentials=creds)
+
+app = Flask(__name__)
 
 @app.route('/atualizar-planilha', methods=['POST'])
 def atualizar_planilha():
@@ -333,6 +334,7 @@ def atualizar_planilha():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
   
  ###Configurando o bot no Telegram em webhook
