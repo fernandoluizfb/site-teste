@@ -289,13 +289,11 @@ libra_processo()
                     
 ###Configuração do bot
 
+import requests
+
 # Defina a chave de acesso do seu bot aqui
 bot_token = os.environ.get('TELEGRAM_API_KEY')
 bot = telegram.Bot(token=bot_token)
-
-# Defina a URL pública do seu aplicativo Render
-# Certifique-se de que essa URL corresponde ao seu endereço Render
-app_url = 'https://site-teste-fernando.onrender.com'
 
 # Rota para o webhook do Telegram
 @app.route(f"/{bot_token}", methods=["POST"])
@@ -322,10 +320,20 @@ def telegram_bot():
     else:
         bot.send_message(chat_id=chat_id, text="Desculpe, não entendi.")
         return nova_mensagem
+    
+    # envie a mensagem de resposta para o Telegram
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    data = {
+        "chat_id": chat_id,
+        "text": texto_resposta,
+    }
+    response = requests.post(url, data=data)
+    print(response.json())
+    
+    return "ok"
 
 if __name__ == "__main__":
-    # Defina o webhook para escutar as atualizações de mensagem do Telegram
-    bot.setWebhook(url=f"{app_url}/{bot_token}")
     app.run()
+
 
 
