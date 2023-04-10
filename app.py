@@ -18,7 +18,7 @@ TELEGRAM_ADMIN_ID = os.environ["TELEGRAM_ADMIN_ID"]
 GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
 with open("credenciais.json", mode="w") as arquivo:
   arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
-conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
+conta = ServiceAccountCredentials.from_json_keyfile_name("fernando-barbosa-insper-918f351af1d1.json")
 api = gspread.authorize(conta)
 planilha = api.open_by_key("1_FPdKuYoSq6iCCLK7f6dDCOrFpa3s5aBcfQIlXKfSyc")
 sheet = planilha.worksheet("cotacao")
