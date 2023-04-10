@@ -296,7 +296,6 @@ libra_processo()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     
-
 app = Flask(__name__)
 
 # Configurações da planilha
@@ -319,9 +318,22 @@ def atualizar_planilha():
     # Atualiza os valores na planilha
     atualizar_range = f"{RANGE_NAME}!A2:D5"
     atualizar_values = [
-        [f"R$ {dados['dolar_hoje']}", f"R$ {dados['euro_hoje']}", f"R$ {dados['libra_hoje']
+        [f"R$ {dados['dolar_hoje']}", f"R$ {dados['euro_hoje']}", f"R$ {dados['libra_hoje']}", f"R$ {dados['dolar_canadense_hoje']}'"],
+        [f"R$ {dados['dolar_ontem']}", f"R$ {dados['euro_ontem']}", f"R$ {dados['libra_ontem']}", f"R$ {dados['dolar_canadense_ontem']}'"],
+        [f"R$ {dados['dolar_anteontem']}", f"R$ {dados['euro_anteontem']}", f"R$ {dados['libra_anteontem']}", f"R$ {dados['dolar_canadense_anteontem']}'"],
+        [f"R$ {dados['dolar_ante_anteontem']}", f"R$ {dados['euro_ante_anteontem']}", f"R$ {dados['libra_ante_anteontem']}", f"R$ {dados['dolar_canadense_ante_anteontem']}'"]
+    ]
+    request_body = {
+        'values': atualizar_values
+    }
+    response = service.spreadsheets().values().update(
+        spreadsheetId=SPREADSHEET_ID, range=atualizar_range, valueInputOption='USER_ENTERED', body=request_body).execute()
 
-  
+    return 'Planilha atualizada com sucesso!'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
   
  ###Configurando o bot no Telegram em webhook
 
