@@ -303,6 +303,9 @@ RANGE_NAME = "A2:D5"
 
 # Configurações da credencial do Google
 GOOGLE_SHEETS_CREDENTIALS = os.environ["GOOGLE_SHEETS_CREDENTIALS"]
+with open("credenciais.json", mode="w") as arquivo:
+  arquivo.write(GOOGLE_SHEETS_CREDENTIALS)
+conta = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json")
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # Cria o serviço do Google Sheets
