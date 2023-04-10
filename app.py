@@ -55,7 +55,7 @@ def contato():
 
 @app.route("/dedoduro2")
 def dedoduro2():
-  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acesso o bot do Banco Central!"}
+  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou o bot do Banco Central!"}
   resposta = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
   return f"Mensagem enviada. Resposta ({resposta.status_code}): {resposta.text}"
 
@@ -298,7 +298,7 @@ def telegram_bot():
     chat_id = update["message"]["chat"]["id"]
     message = update["message"]["text"]
     if message == "/start":
-        texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione "1" para dólar, "2" para euro, "3" para a libra e "4" para dólar canadense"
+        texto_resposta = "Olá! Seja bem-vindo(a).\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas.\n\nVocê gostaria de saber sobre dólar, euro ou libra?\nPressione 1 para dólar, 2 para euro, 3 para a libra e 4 para dólar canadense"
     elif message == "1":
         texto_resposta = dolar_processo()
     elif message == "2":
