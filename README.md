@@ -30,3 +30,19 @@ A etapa seguinte é quando o código usa a biblioteca do Banco Central para pega
 Essas moedas são salvas em funções, como def dolar_ptax(), euro_ptax(), dolar_canadense_ptax() e libra_ptax(). Logo abaixo de cada função, é possível ver o dataframe de cada moeda, que será usado mais tarde para processar os dados.
 
 # Etapa 6
+
+Aí é hora de memorizar as cotações das moedas nos últimos quatro dias em variáveis, como dolar_hoje e dolar_ontem.
+
+# Etapa 7
+
+A partir dos dados dos dataframes das funções das diferentes moedas, é usado a função pct_change(periods=-1) para definir a variação da moeda de um dia para o outro. As variações também são salvas em funções, como dolar_percentual_hoje e dolar_percentual_ontem.
+
+# Etapa 8
+
+A última parte do código com as moedas é estabelecer funções com frases que serão exibidas para o usuário. Com 'if' e 'else', o código consegue exibir se uma determinada moeda subiu ou caiu e qual foi a sua variação.
+
+# Etapa 9
+
+A última parte é criar o robô do telegram via webhook. Para isso, ao invés do modelo get, é usada a biblioteca requests com o methods=["POST"]).
+
+No caso desse robô, ele exibe as frases processadas sobre determinada moeda, de acordo com a solicitação do usuário. 
