@@ -294,8 +294,6 @@ libra_processo()
                     
 ###Configuração do bot
 
-app = Flask(__name__)
-
 # Defina a chave de acesso do seu bot aqui
 bot_token = os.environ.get('TELEGRAM_API_KEY')
 bot = telegram.Bot(token=bot_token)
