@@ -47,6 +47,29 @@ def dedoduro():
   resposta = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
   return f"Mensagem enviada. Resposta ({resposta.status_code}): {resposta.text}"
 
+menu = """
+<a href="/">Página inicial</a> | <a href="/promocoes">PROMOÇÕES</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a>
+<br>
+"""
+
+@app.route("/")
+def index():
+  return menu + "Olá, mundo! Esse é meu site. (Álvaro Justen)"
+
+@app.route("/sobre")
+def sobre():
+  return menu + "Aqui vai o conteúdo da página Sobre"
+
+@app.route("/contato")
+def contato():
+  return menu + "Aqui vai o conteúdo da página Contato"
+
+@app.route("/dedoduro")
+def dedoduro():
+  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou a página dedo duro!"}
+  resposta = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
+  return f"Mensagem enviada. Resposta ({resposta.status_code}): {resposta.text}"
+
 ###Definindo a data de hoje
 
 def hoje():
