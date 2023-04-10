@@ -84,7 +84,7 @@ peso_argentino = sgs.get({'peso_argentino':14001}, start = '1994-01-01')
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-###Consultando diferentes moedas
+###Salvando as moedas em funções
 
 def dolar_ptax():
     df = sgs.get(1)
@@ -133,7 +133,7 @@ libra_ptax_reset = libra_ptax_df.reset_index()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#MEMORIZANDO AS COTAÇÕES DAS MOEDAS NA PLANILHA
+#Memorizando os dias das moedas em variáveis
 
 ###Dólar
 
@@ -172,7 +172,7 @@ libra_ante_anteontem = libra_ptax_reset.loc[3,'Libra']
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Estabelecendo os percentuais
+#Estabelecendo a variação percentual de um dia para o outro
 
 ###Dólar 
 
@@ -232,7 +232,7 @@ variacao_ontem_libra = libra_percentual_reset.loc[1,'Libra']
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Processamento dos dados
+#Processando os dados 
 # 
 ###Dólar
 
@@ -287,10 +287,10 @@ libra_processo()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------
                     
-###Configuração do bot
+###Configurando o bot no Telegram em webhook
 
 
-# Rota para o webhook do Telegram
+# Rota para o webhook
 @app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
     update = request.get_json()
