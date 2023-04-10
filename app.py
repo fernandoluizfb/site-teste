@@ -55,7 +55,7 @@ def contato():
 
 @app.route("/dedoduro2")
 def dedoduro2():
-  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acessou a página dedo duro!"}
+  mensagem = {"chat_id": TELEGRAM_ADMIN_ID, "text": "Alguém acesso o bot do Banco Central!"}
   resposta = requests.post(f"https://api.telegram.org/bot{TELEGRAM_API_KEY}/sendMessage", data=mensagem)
   return f"Mensagem enviada. Resposta ({resposta.status_code}): {resposta.text}"
 
@@ -289,14 +289,9 @@ libra_processo()
                     
 ###Configuração do bot
 
-import requests
-
-# Defina a chave de acesso do seu bot aqui
-bot_token = os.environ.get('TELEGRAM_API_KEY')
-bot = telegram.Bot(token=bot_token)
 
 # Rota para o webhook do Telegram
-@app.route(f"/{bot_token}", methods=["POST"])
+@app.route("/telegram-bot", methods=["POST"])
 def telegram_bot():
     update = telegram.Update.de_json(request.get_json(force=True), bot)
     chat_id = update.message.chat_id
@@ -326,14 +321,17 @@ def telegram_bot():
     data = {
         "chat_id": chat_id,
         "text": texto_resposta,
+        "parse_mode": "HTML"
     }
     response = requests.post(url, data=data)
     print(response.json())
     
+
     return "ok"
 
 if __name__ == "__main__":
     app.run()
+
 
 
 
