@@ -284,10 +284,10 @@ euro_processo()
 def libra_processo():
   
   if libra_hoje > libra_ontem:
-    return (f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.0}% acima de ontem. No dia anterior, a moeda europeia havia encerrado em R${libra_ontem:.4}')
+    return (f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.0}% acima de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4}')
 
   else:
-      return (f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.0}% abaixo de ontem. No dia anterior, a moeda europeia havia encerrado em R${libra_ontem:.4} ')
+      return (f'A libra fechou o dia em R${libra_hoje:.4}, patamar {variacao_hoje_libra:.0}% abaixo de ontem. No dia anterior, a moeda inglesa havia encerrado em R${libra_ontem:.4} ')
 
 libra_processo()  
 
