@@ -12,5 +12,3 @@ datetime
 python-telegram-bot==13.9
 telegram
 matplotlib
-email.message
-smtplib
