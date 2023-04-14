@@ -305,15 +305,15 @@ def telegram_bot():
     chat_id = update["message"]["chat"]["id"]
     message = update["message"]["text"]
     if message == "/start":
-        texto_resposta = "Olá! Seja bem-vindo(a).\n\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas👨‍🎓\n\nVocê gostaria de saber sobre dólar, euro, libra ou dólar canadense?\n\nPressione '1' para dólar, '2' para euro, '3' para a libra e '4' para dólar canadense"
+        texto_resposta = "Olá! Seja bem-vindo(a).\n\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas <p>&#129489</p>\n\nVocê gostaria de saber sobre dólar, euro, libra ou dólar canadense?\n\nPressione '1' para dólar, '2' para euro, '3' para a libra e '4' para dólar canadense"
     elif message == "1":
-        texto_resposta = dolar_processo()💸
+        texto_resposta = dolar_processo()<p>&#128184</p>
     elif message == "2":
-        texto_resposta = euro_processo()💴
+        texto_resposta = euro_processo()<p>&#128182</p>
     elif message == "3":
-        texto_resposta = libra_processo()💰
+        texto_resposta = libra_processo()<p>&#128176</p>
     elif message == "4":
-        texto_resposta = dolar_canadense_processo()💲      
+        texto_resposta = dolar_canadense_processo()<p>&#128178</p>      
     else:
         texto_resposta = "Desculpe, não entendi."
     
