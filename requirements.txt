@@ -11,4 +11,3 @@ numpy
 datetime
 python-telegram-bot==13.9
 telegram
-matplotlib
