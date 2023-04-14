@@ -4,9 +4,6 @@ import gspread
 import pandas as pd
 import requests
 import telegram
-import datetime
-import pandas as pd
-import gspread
 
 from flask import Flask, request
 from oauth2client.service_account import ServiceAccountCredentials
@@ -44,7 +41,7 @@ def novamensagem():
   return "Mensagem enviada."
 
 menu = """
-<a href="/">Página inicial</a> | <a href="/promocoes">PROMOÇÕES</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/dedoduro2">dedoduro2</a> <a href="/email">Email</a>
+<a href="/">Página inicial</a> | <a href="/promocoes">PROMOÇÕES</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/dedoduro2">dedoduro2</a>
 <br>
 """
 
@@ -59,10 +56,6 @@ def sobre():
 @app.route("/contato")
 def contato():
   return menu + "Aqui vai o conteúdo da página Contato"
-
-@app.route("/email")
-def contato():
-  return menu + "Essa página para o email das cotações das moedas"
 
 @app.route("/dedoduro2")
 def dedoduro2():
@@ -338,9 +331,3 @@ def telegram_bot():
 
 if __name__ == "__main__":
     app.run()
-
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
