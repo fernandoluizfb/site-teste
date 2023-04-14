@@ -7,7 +7,6 @@ import telegram
 import datetime
 import pandas as pd
 import gspread
-import matplotlib.pyplot as plt
 
 from flask import Flask, request
 from oauth2client.service_account import ServiceAccountCredentials
