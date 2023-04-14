@@ -4,8 +4,6 @@ import gspread
 import pandas as pd
 import requests
 import telegram
-import smtplib
-import email.message
 import datetime
 import pandas as pd
 import gspread
