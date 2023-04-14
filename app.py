@@ -307,13 +307,13 @@ def telegram_bot():
     if message == "/start":
         texto_resposta = "Olá! Seja bem-vindo(a).\n\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas &#129489\n\nVocê gostaria de saber sobre dólar, euro, libra ou dólar canadense?\n\nPressione '1' para dólar, '2' para euro, '3' para a libra e '4' para dólar canadense"
     elif message == "1":
-        texto_resposta = dolar_processo()#128184
+        texto_resposta = dolar_processo()&#128184
     elif message == "2":
-        texto_resposta = euro_processo()#128182
+        texto_resposta = euro_processo()&#128182
     elif message == "3":
-        texto_resposta = libra_processo()#128176
+        texto_resposta = libra_processo()&#128176
     elif message == "4":
-        texto_resposta = dolar_canadense_processo()#128178   
+        texto_resposta = dolar_canadense_processo()&#128178   
     else:
         texto_resposta = "Desculpe, não entendi."
     
