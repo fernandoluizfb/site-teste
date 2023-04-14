@@ -41,7 +41,7 @@ def novamensagem():
   return "Mensagem enviada."
 
 menu = """
-<a href="/">Página inicial</a> | <a href="/promocoes">PROMOÇÕES</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/dedoduro2">dedoduro2</a>
+<a href="/">Página inicial</a> | <a href="/sobre">Sobre</a> | <a href="/contato">Contato</a> | <a href="/dedoduro2">dedoduro2</a>
 <br>
 """
 
