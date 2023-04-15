@@ -305,7 +305,7 @@ def telegram_bot():
     chat_id = update["message"]["chat"]["id"]
     message = update["message"]["text"]
     if message == "/start":
-        texto_resposta = "Olá! Seja bem-vindo(a).\n\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas &#129489\n\nVocê gostaria de saber sobre dólar, euro, libra ou dólar canadense?\n\nPressione '1' para dólar&#128184, '2' para euro&#128182, '3' para a libra&#128176 e '4' para dólar canadense&#128178"
+        texto_resposta = "Olá! Seja bem-vindo(a).\n\nSou um robô criado no curso de Jornalismo de Dados do Insper para mostrar informações econômicas &#129489\n\nVocê gostaria de saber sobre dólar, euro, libra ou dólar canadense?\n\nPressione '1' para dólar &#128184, '2' para euro &#128182, '3' para a libra &#128176 e '4' para dólar canadense &#128178"
     elif message == "1":
         texto_resposta = dolar_processo()
     elif message == "2":
